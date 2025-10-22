@@ -17,7 +17,9 @@ SECRET_KEY = 'django-insecure-wzw1)hqt05qqi*03dz$yo1wwtho7*=neh+pemsy$jc-e0l&i!f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1"]
+
+CSRF_TRUSTED_ORIGINS = ['43.205.128.213', '127.0.0.1:5500']
 
 
 # Application definition
@@ -132,3 +134,9 @@ cloudinary.config(
 # }
 
 # DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5500",  # React/Next.js frontend
+    "http://127.0.0.1:5500",  # Sometimes frontend uses this instead
+]
+CORS_ALLOW_CREDENTIALS = True
