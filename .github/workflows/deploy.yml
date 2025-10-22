@@ -1,3 +1,4 @@
+
 name: Django CI/CD to EC2
 
 on:
@@ -15,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10  # or the version you use
+          python-version: '3.11'  # or the version you use
 
       - name: Install dependencies
         run: |
