@@ -14,6 +14,6 @@ def get_memes(request):
         else:
             queryset = Memes.objects.all().order_by('-created_at').filter(type = type) # newest first
         serializer = MemesSerializer(queryset, many=True)
-        return JsonResponse({"status": "blah", "data": serializer.data})
+        return JsonResponse({"status": "blah"})
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)})
