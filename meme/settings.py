@@ -22,8 +22,8 @@ ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1"]
 # CSRF_TRUSTED_ORIGINS = ['43.205.128.213', '127.0.0.1:5500']
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:5500',
-    'http://localhost:5500',
+    'http://127.0.0.1',
+    'http://localhost',
     'http://43.205.128.213',
     'https://43.205.128.213',
 ]
@@ -145,7 +145,7 @@ cloudinary.config(
 # DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5500",  # React/Next.js frontend
-    "http://127.0.0.1:5500",  # Sometimes frontend uses this instead
+    "http://localhost",  # React/Next.js frontend
+    "http://127.0.0.1",  # Sometimes frontend uses this instead
 ]
 CORS_ALLOW_CREDENTIALS = True
