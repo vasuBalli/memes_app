@@ -19,7 +19,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1"]
 
-CSRF_TRUSTED_ORIGINS = ['43.205.128.213', '127.0.0.1:5500']
+# CSRF_TRUSTED_ORIGINS = ['43.205.128.213', '127.0.0.1:5500']
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:5500',
+    'http://localhost:5500',
+    'http://43.205.128.213',
+    'https://43.205.128.213',
+]
 
 
 # Application definition
