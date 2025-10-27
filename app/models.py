@@ -15,6 +15,7 @@ class Memes(models.Model):
     title = models.CharField(max_length=100)
     file = CloudinaryField(resource_type="auto", null=True, blank=True)
     tags = models.CharField(max_length=200, blank=True)
+    caption = models.CharField(max_length=200, blank=True)
     downloads = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     type = models.CharField(max_length=50, choices=TYPE_CHOICES,null=True, blank=True)
