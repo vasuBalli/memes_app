@@ -15,7 +15,7 @@ class MemesSerializer(serializers.ModelSerializer):
             'downloads',
             'created_at',
             'type',
-            'caption'
+            'caption',
             'language',
         ]
 
