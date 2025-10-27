@@ -47,9 +47,9 @@ jobs:
             pip install -r requirements.txt
 
             # Apply migrations and collect static files
-            python manage.py makemigrations --noinput
-            python manage.py migrate --noinput
-            python manage.py collectstatic --noinput
+            python3 manage.py makemigrations --noinput
+            python3 manage.py migrate --noinput
+            python3 manage.py collectstatic --noinput
 
             # Restart Supervisor program
             sudo supervisorctl restart guni:gunicorn
