@@ -1,3 +1,4 @@
 # db.sqlite3
 # db.sqlite3-journal
 # app/migrations/
+git rm --cached db.sqlite3
