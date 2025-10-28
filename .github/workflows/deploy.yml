@@ -37,8 +37,8 @@ jobs:
             cd /home/ubuntu/memes_app
             
             # Force update repo to match GitHub
-            git fetch --all
-            git reset --hard origin/main
+            git fetch origin main
+            git pull origin main
 
             # Activate virtual environment
             source /home/ubuntu/venv/bin/activate
