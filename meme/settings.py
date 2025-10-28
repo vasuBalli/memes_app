@@ -149,3 +149,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1",  # Sometimes frontend uses this instead
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+
+# Allow large file uploads (e.g., >100MB)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1048576000  # 1GB (in bytes)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1048576000  # 1GB (in bytes)
