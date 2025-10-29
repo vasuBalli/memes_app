@@ -12,7 +12,7 @@ class Memes(models.Model):
         ('english', 'Eng'),
     )
 
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100,null=True, blank=True)
     file = CloudinaryField(resource_type="auto", null=True, blank=True)
     tags = models.CharField(max_length=200, blank=True)
     user_name = models.CharField(max_length=200, blank=True)
