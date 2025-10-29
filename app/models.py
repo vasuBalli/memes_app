@@ -2,6 +2,8 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 
+#testing
+
 class Memes(models.Model):
     TYPE_CHOICES = (
         ('image', 'Image'),

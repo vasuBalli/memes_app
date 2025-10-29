@@ -38,7 +38,8 @@ jobs:
             
             # Force update repo to match GitHub
             git fetch origin main
-            git reset --hard origin/main
+            git pull origin main
+            # git reset --hard origin/main
             
             # Activate virtual environment
             source /home/ubuntu/venv/bin/activate
