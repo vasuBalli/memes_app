@@ -2,7 +2,7 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 
-#testing
+#testingg
 
 class Memes(models.Model):
     TYPE_CHOICES = (
