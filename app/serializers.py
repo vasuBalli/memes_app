@@ -12,10 +12,10 @@ class MemesSerializer(serializers.ModelSerializer):
             'title',
             'file_url',   # the serialized URL
             'tags',
+            'user_name',
             'downloads',
             'created_at',
             'type',
-            
             'language',
         ]
 
