@@ -1,3 +1,16 @@
-# db.sqlite3
-# db.sqlite3-journal
-# app/migrations/
+# Databases
+db.sqlite3
+
+# Django cache & compiled files
+app/__pycache__/
+meme/__pycache__/
+app/migrations/
+
+*.pyc
+
+
+
+# IDE files
+.vscode/
+.idea/
+
