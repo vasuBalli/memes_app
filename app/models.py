@@ -1,32 +1,6 @@
-# from django.db import models
-# from cloudinary.models import CloudinaryField
-
-# Create your models here.
-
-# class Memes(models.Model):
-#     TYPE_CHOICES = (
-#         ('image', 'Image'),
-#         ('video', 'Video'),
-#     )
-#     language = (
-#         ('telugu', 'Tel'),
-#         ('english', 'Eng'),
-#     )
-#     title = models.CharField(max_length=100)
-#     file = CloudinaryField(resource_type="auto", null=True, blank=True)
-#     tags = models.CharField(max_length=200, blank=True)
-#     caption = models.CharField(max_length=200, blank=True)
-#     downloads = models.IntegerField(default=0)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     type = models.CharField(max_length=50, choices=TYPE_CHOICES,null=True, blank=True)
-#     language = models.CharField(max_length=50, choices=language,null=True, blank=True)
-#     def __str__(self):
-#         return self.title
-    
 
 from django.db import models
 from cloudinary.models import CloudinaryField
-import cloudinary.uploader
 
 class Memes(models.Model):
     TYPE_CHOICES = (
@@ -50,15 +24,5 @@ class Memes(models.Model):
     def __str__(self):
         return self.title
 
-    def delete(self, *args, **kwargs):
-        """
-        Override delete() so the file is also removed from Cloudinary
-        when the object is deleted from Django.
-        """
-        if self.file:
-            try:
-                cloudinary.uploader.destroy(self.file.public_id, resource_type="auto")
-            except Exception as e:
-                print(f"Cloudinary delete failed: {e}")
-        super().delete(*args, **kwargs)
+
 
