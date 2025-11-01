@@ -14,7 +14,15 @@ def get_memes(request):
         else:
             queryset = Memes.objects.all().order_by('-created_at').filter(type = type) # newest first
         serializer = MemesSerializer(queryset, many=True)
-        return JsonResponse({"status": "success", "data": serializer.data})
+        data =serializer.data
+    
+        for i in data:
+            print(i["file_url"])
+            try:
+                i["file_url"] = i["file_url"].replace("http://", "https://")
+            except:
+                pass    
+        return JsonResponse({"status": "success", "data": data})
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)})
     
