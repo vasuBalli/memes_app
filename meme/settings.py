@@ -17,7 +17,7 @@ SECRET_KEY = 'django-insecure-wzw1)hqt05qqi*03dz$yo1wwtho7*=neh+pemsy$jc-e0l&i!f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1"]
+ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1","getdownload.site","www.getdownload.site"]
 
 # CSRF_TRUSTED_ORIGINS = ['43.205.128.213', '127.0.0.1:5500']
 
@@ -26,6 +26,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://43.205.128.213',
     'https://43.205.128.213',
+    'http://getdownload.site',
+    'https://getdownload.site',
 ]
 
 
