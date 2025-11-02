@@ -51,7 +51,7 @@ def privacy_policy(request):
 
 @csrf_exempt
 def webhook(request):
-    print("webhook called")
+    logger.info("Webhook endpoint accessed")
     if request.method == 'GET':
         # Webhook verification (Meta Challenge)
         try:
@@ -66,7 +66,7 @@ def webhook(request):
         # Handle webhook events (Instagram sends updates here)
         try:
             data = request.body.decode('utf-8')
-            print("📩 Received Webhook Event:", data)
+            logger.info(f"Received Webhook Event: {data}")
             return JsonResponse({'status': 'received'}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
