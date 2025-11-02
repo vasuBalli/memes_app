@@ -27,6 +27,7 @@ def get_memes(request):
         return JsonResponse({"status": "error", "message": str(e)})
     
 def privacy_policy(request):
+    print("Privacy policy requested")
     html_content = """
     <html>
     <head><title>Privacy Policy</title></head>
