@@ -44,6 +44,7 @@ def privacy_policy(request):
     return HttpResponse(html_content)
 
 def webhook(request):
+    print("webhook called")
     if request.method == 'GET':
         # Webhook verification (Meta Challenge)
         try:
