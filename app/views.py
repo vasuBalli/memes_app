@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Memes
 from django.http import HttpResponse, JsonResponse
 from .serializers import MemesSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 import logging
 
@@ -48,6 +49,7 @@ def privacy_policy(request):
     """
     return HttpResponse(html_content)
 
+@csrf_exempt
 def webhook(request):
     print("webhook called")
     if request.method == 'GET':
