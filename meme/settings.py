@@ -157,3 +157,48 @@ CORS_ALLOW_CREDENTIALS = True
 # Allow large file uploads (e.g., >100MB)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1048576000  # 1GB (in bytes)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1048576000  # 1GB (in bytes)
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # keeps Django's default logs
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name}: {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',  # can be INFO, WARNING, ERROR in production
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {  # default Django logs
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {  # for request errors (like 500s)
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'app_logger': {  # your custom logs
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}

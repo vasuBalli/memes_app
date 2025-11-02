@@ -2,6 +2,10 @@ from django.shortcuts import render
 from .models import Memes
 from django.http import HttpResponse, JsonResponse
 from .serializers import MemesSerializer
+
+import logging
+
+logger = logging.getLogger('app_logger')
 # Create your views here.
 
 
@@ -27,7 +31,7 @@ def get_memes(request):
         return JsonResponse({"status": "error", "message": str(e)})
     
 def privacy_policy(request):
-    print("Privacy policy requested")
+    logger.info("Privacy policy page accessed")
     html_content = """
     <html>
     <head><title>Privacy Policy</title></head>
