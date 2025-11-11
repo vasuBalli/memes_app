@@ -110,7 +110,7 @@ def get_memes(request):
         return JsonResponse({"status": "error", "message": str(e)})
     
 def privacy_policy(request):
-    print("inside privacy policy")
+    logger.info("Privacy policy page accessed")
     # instagram_login()
     # fetch_instagram_video()
     print("sucessfully uploaded")
