@@ -159,7 +159,7 @@ def webhook(request):
             message_text = message_obj.get("text")
             sender_id = messaging.get("sender", {}).get("id")
             if message_text:
-                url = message_text
+                url = message_text.replace("\"", "")
                 download_and_upload_instagram_video(url)
                 logger.info("uploaded successfully")
             # logger.info(f"Received Webhook Event: {data}")
