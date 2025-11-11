@@ -101,7 +101,7 @@ def get_memes(request):
             print(i["file_url"])
             try:
                 i["file_url"] = i["file_url"].replace("http://", "https://")
-            
+            #s
             except:
                 pass    
         return JsonResponse({"status": "success", "data": data})
