@@ -85,7 +85,9 @@ def fetch_instagram_video():
 
     print("✅ Uploaded to Cloudinary")
 def get_memes(request):
+    logger.info("get_memes endpoint accessed")
     try:
+        logger.info("Fetching memes from database")
         type = request.GET.get('meme_type', None)
         if type is None:
             queryset = Memes.objects.all().order_by('-created_at') # newest first
@@ -94,7 +96,7 @@ def get_memes(request):
             queryset = Memes.objects.all().order_by('-created_at').filter(type = type) # newest first
         serializer = MemesSerializer(queryset, many=True)
         data =serializer.data
-    
+        logger.info(f"Fetched {len(data)} memes")
         for i in data:
             print(i["file_url"])
             try:
@@ -104,6 +106,7 @@ def get_memes(request):
                 pass    
         return JsonResponse({"status": "success", "data": data})
     except Exception as e:
+        logger.error(f"Error fetching memes: {str(e)}")
         return JsonResponse({"status": "error", "message": str(e)})
     
 def privacy_policy(request):
