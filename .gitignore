@@ -13,4 +13,7 @@ app/migrations/
 # IDE files
 .vscode/
 .idea/
+#django logs
+logs/
+*.log
 
