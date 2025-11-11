@@ -1,0 +1,590 @@
+[2025-11-03 11:41:43,981] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 11:41:51,028] WARNING django.server: "GET / HTTP/1.1" 404 179
+[2025-11-03 11:41:51,245] WARNING django.server: "GET /favicon.ico HTTP/1.1" 404 179
+[2025-11-03 11:43:17,690] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 11:43:19,892] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 11:43:22,927] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 11:43:24,957] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 11:43:27,962] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 11:43:30,011] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 11:43:35,649] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 11:43:38,128] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 11:43:41,509] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 11:43:46,880] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 11:44:14,302] INFO django.server: "GET /api/privacy_policy HTTP/1.1" 301 0
+[2025-11-03 11:44:24,301] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 97, in privacy_policy
+    save_instagram_post(link)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 67, in save_instagram_post
+    ig_post.file.save(f"{shortcode_safe}.jpg", ContentFile(media_bytes))
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-03 11:44:24,384] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 11:45:00,966] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 11:45:03,448] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 11:45:11,413] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 11:45:13,294] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:47:59,614] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:48:04,966] WARNING django.server: "GET / HTTP/1.1" 404 179
+[2025-11-03 16:48:26,829] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 97, in privacy_policy
+    save_instagram_post(link)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 67, in save_instagram_post
+    ig_post.file.save(f"{shortcode_safe}.jpg", ContentFile(media_bytes))
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-03 16:48:26,853] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 16:49:22,229] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:49:22,429] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:49:31,342] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:49:31,343] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:49:54,415] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 98, in privacy_policy
+    save_instagram_post(link)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 67, in save_instagram_post
+    ig_post.file.save(f"{shortcode_safe}.jpg", ContentFile(media_bytes))
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-03 16:49:54,421] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 16:50:14,426] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:50:14,720] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:50:16,614] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:50:16,622] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:50:21,292] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:50:21,301] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:50:23,213] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:50:23,221] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:50:49,017] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 107, in privacy_policy
+    save_instagram_post(link)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 67, in save_instagram_post
+    ig_post.file.save(f"{shortcode_safe}.jpg", ContentFile(media_bytes))
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-03 16:50:49,022] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 16:51:08,330] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:51:41,296] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 107, in privacy_policy
+    save_instagram_post(link)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 67, in save_instagram_post
+    ig_post.file.save(f"{shortcode_safe}.jpg", ContentFile(media_bytes))
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-03 16:51:41,299] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 16:52:20,298] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 107, in privacy_policy
+    save_instagram_post(link)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 67, in save_instagram_post
+    ig_post.file.save(f"{shortcode_safe}.jpg", ContentFile(media_bytes))
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-03 16:52:20,302] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 16:52:51,624] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:52:53,677] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:52:55,314] INFO app_logger: Privacy policy page accessed
+[2025-11-03 16:52:55,316] INFO django.server: "GET /api/privacy_policy/ HTTP/1.1" 200 688
+[2025-11-03 16:53:03,741] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:53:05,713] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:53:20,208] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 107, in privacy_policy
+    save_instagram_post(link)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 67, in save_instagram_post
+    ig_post.file.save(f"{shortcode_safe}.jpg", ContentFile(media_bytes))
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-03 16:53:20,215] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 16:56:23,371] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:56:25,449] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:56:31,018] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:56:33,032] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:56:40,674] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:56:42,688] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:56:45,961] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:56:47,761] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:56:53,112] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:56:55,137] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 16:57:44,801] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 16:57:46,909] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:00:05,213] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:00:06,845] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:00:09,405] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:00:10,517] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:00:25,471] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:00:26,891] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:00:31,408] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:00:32,689] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:00:46,814] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:00:48,222] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:00:53,856] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:00:55,093] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:01:12,525] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 164, in privacy_policy
+    upload_instagram_media(link)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: upload_instagram_media() missing 1 required positional argument: 'insta_url'
+[2025-11-03 17:01:12,555] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 17:01:33,589] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:01:35,360] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:01:37,916] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:01:39,331] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:01:46,367] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 165, in privacy_policy
+    upload_instagram_media(link)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 80, in upload_instagram_media
+    L.load_session_from_file("shailajakathi85")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\instaloader\instaloader.py", line 635, in load_session_from_file
+    with open(filename, 'rb') as sessionfile:
+         ~~~~^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'c:\\users\\vasuba~1\\appdata\\local\\temp/.instaloader-vasu balli/session-shailajakathi85'
+[2025-11-03 17:01:46,374] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-03 17:03:21,233] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-03 17:03:22,633] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-03 17:03:44,339] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 165, in privacy_policy
+    upload_instagram_media(link)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 80, in upload_instagram_media
+    L.load_session_from_file("shailajakathi85@gmail.com")
+                             ^^^^^^^^^^^^^^^
+NameError: name 'shailajakathi85' is not defined
+[2025-11-03 17:03:44,375] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 01:44:59,582] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:45:04,771] WARNING django.server: "GET / HTTP/1.1" 404 179
+[2025-11-04 01:45:05,048] WARNING django.server: "GET /favicon.ico HTTP/1.1" 404 179
+[2025-11-04 01:45:24,010] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1645, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1780, in __extract_info
+    ie_result = ie.extract(url)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\extractor\common.py", line 762, in extract
+    ie_result = self._real_extract(url)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\extractor\instagram.py", line 474, in _real_extract
+    raise ExtractorError('There is no video in this post', expected=True)
+yt_dlp.utils.ExtractorError: [Instagram] DQYWL84gTX7: There is no video in this post
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 94, in privacy_policy
+    fetch_and_upload_instagram_video(link)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 27, in fetch_and_upload_instagram_video
+    info = ydl.extract_info(insta_url, download=False)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1634, in extract_info
+    return self.__extract_info(url, self.get_info_extractor(key), download, extra_info, process)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1663, in wrapper
+    self.report_error(str(e), e.format_traceback())
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1103, in report_error
+    self.trouble(f'{self._format_err("ERROR:", self.Styles.ERROR)} {message}', *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1042, in trouble
+    raise DownloadError(message, exc_info)
+yt_dlp.utils.DownloadError: [0;31mERROR:[0m [Instagram] DQYWL84gTX7: There is no video in this post
+[2025-11-04 01:45:24,123] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 01:46:04,141] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:46:06,107] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:46:13,710] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1645, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1780, in __extract_info
+    ie_result = ie.extract(url)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\extractor\common.py", line 762, in extract
+    ie_result = self._real_extract(url)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\extractor\instagram.py", line 474, in _real_extract
+    raise ExtractorError('There is no video in this post', expected=True)
+yt_dlp.utils.ExtractorError: [Instagram] DQYWL84gTX7: There is no video in this post
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 94, in privacy_policy
+    fetch_and_upload_instagram_video(link)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 27, in fetch_and_upload_instagram_video
+    info = ydl.extract_info(insta_url, download=False)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1634, in extract_info
+    return self.__extract_info(url, self.get_info_extractor(key), download, extra_info, process)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1663, in wrapper
+    self.report_error(str(e), e.format_traceback())
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1103, in report_error
+    self.trouble(f'{self._format_err("ERROR:", self.Styles.ERROR)} {message}', *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\yt_dlp\YoutubeDL.py", line 1042, in trouble
+    raise DownloadError(message, exc_info)
+yt_dlp.utils.DownloadError: [0;31mERROR:[0m [Instagram] DQYWL84gTX7: There is no video in this post
+[2025-11-04 01:46:13,719] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 01:46:40,931] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:46:43,205] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:47:06,083] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 94, in privacy_policy
+    fetch_and_upload_instagram_video(link)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 40, in fetch_and_upload_instagram_video
+    raise Exception("Video file not found. Check yt-dlp output path.")
+Exception: Video file not found. Check yt-dlp output path.
+[2025-11-04 01:47:06,091] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 01:49:05,108] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:49:07,475] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:49:20,613] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:49:22,687] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:49:27,630] INFO django.server: "GET /api/privacy_policy/ HTTP/1.1" 200 688
+[2025-11-04 01:52:22,995] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2025-11-04 01:52:25,281] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:52:51,795] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2025-11-04 01:52:53,737] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:53:04,627] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2025-11-04 01:53:06,636] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:53:44,040] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:53:46,395] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:54:09,777] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:54:11,682] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:54:32,372] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:54:34,691] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:55:03,893] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:55:05,941] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:55:27,854] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:55:29,859] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:56:02,999] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:56:05,077] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:56:12,664] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 82, in privacy_policy
+    save_instagram_video(link)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 40, in save_instagram_video
+    video.file.save(os.path.basename(filepath), video_file, save=True)
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-04 01:56:12,672] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 01:57:12,389] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:57:14,682] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:57:25,477] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:57:27,374] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:57:33,171] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 82, in privacy_policy
+    save_instagram_video(link)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 40, in save_instagram_video
+    video.file.save(os.path.basename(filepath), video_file, save=True)
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-04 01:57:33,175] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 01:59:05,024] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 01:59:07,467] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 01:59:13,245] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 83, in privacy_policy
+    save_instagram_video(link)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 41, in save_instagram_video
+    video.file.save(os.path.basename(filepath), video_file, save=True)
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'save'
+[2025-11-04 01:59:13,253] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 21:06:27,615] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:06:48,420] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.ProgrammingError: Error binding parameter 2: type 'File' is not supported
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 87, in privacy_policy
+    fetch_instagram_video()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 61, in fetch_instagram_video
+    video_obj = download_and_save_instagram_video(url, caption="My Insta Video")
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 39, in download_and_save_instagram_video
+    video_obj = Memes.objects.create(
+        title=caption or info.get('title', ''),
+        file=django_file
+    )
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: Error binding parameter 2: type 'File' is not supported
+[2025-11-04 21:06:49,585] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 21:07:39,720] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:07:44,201] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:07:54,931] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:07:57,454] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:08:02,531] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:08:04,747] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:08:14,597] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 91, in privacy_policy
+    fetch_instagram_video()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 66, in fetch_instagram_video
+    print(f"Saved video: {video_obj.video.url}")
+                          ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'video'
+[2025-11-04 21:08:14,607] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 21:09:24,286] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:09:29,034] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:09:39,377] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:09:41,710] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:09:45,541] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:09:47,589] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:10:29,313] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 81, in privacy_policy
+    fetch_instagram_video()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 55, in fetch_instagram_video
+    video_obj = download_and_save_instagram_video(url, caption="My Insta Video")
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 35, in download_and_save_instagram_video
+    video = Memes.objects.create(
+        caption=caption or info.get('title', ''),
+    )
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\query.py", line 661, in create
+    obj = self.model(**kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\db\models\base.py", line 569, in __init__
+    raise TypeError(
+    ...<2 lines>...
+    )
+TypeError: Memes() got unexpected keyword arguments: 'caption'
+[2025-11-04 21:10:29,472] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 21:10:51,865] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:10:54,608] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:11:00,972] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:11:04,760] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:11:09,551] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:11:12,110] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:11:16,241] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 85, in privacy_policy
+    fetch_instagram_video()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 60, in fetch_instagram_video
+    print(f"Saved video: {video_obj.video.url}")
+                          ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'video'
+[2025-11-04 21:11:16,254] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 21:11:27,735] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:11:30,644] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:11:36,196] ERROR django.request: Internal Server Error: /api/privacy_policy/
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 85, in privacy_policy
+    fetch_instagram_video()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py", line 60, in fetch_instagram_video
+    print(f"Saved video: {video_obj.video.url}")
+                          ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'video'
+[2025-11-04 21:11:36,204] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 21:14:26,422] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:14:29,238] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:14:51,326] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:14:53,547] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:16:29,629] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:16:31,854] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:17:08,272] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:17:10,317] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:17:13,781] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:17:15,829] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:17:19,858] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:17:21,905] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:17:49,045] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:17:51,000] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:18:43,106] ERROR django.server: "GET /api/privacy_policy/ HTTP/1.1" 500 145
+[2025-11-04 21:19:41,293] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-04 21:19:43,533] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-04 21:20:30,542] INFO django.server: "GET /api/privacy_policy/ HTTP/1.1" 200 688
+[2025-11-09 10:47:52,622] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-09 10:48:25,076] INFO django.server: "GET /api/privacy_policy/ HTTP/1.1" 200 688
+[2025-11-09 10:48:25,291] WARNING django.server: "GET /favicon.ico HTTP/1.1" 404 179
+[2025-11-09 10:50:55,969] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-09 10:50:58,557] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-09 11:00:01,386] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-09 11:00:03,835] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-09 11:00:07,808] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-09 11:00:09,778] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-09 11:00:13,630] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-09 11:00:15,551] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-09 11:00:28,430] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-09 11:00:30,560] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2025-11-09 11:01:45,916] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2025-11-09 11:01:48,182] INFO django.utils.autoreload: Watching for file changes with StatReloader

@@ -1,15 +1,89 @@
-from django.shortcuts import render
 from .models import Memes
 from django.http import HttpResponse, JsonResponse
 from .serializers import MemesSerializer
 from django.views.decorators.csrf import csrf_exempt
-
+import requests
 import logging
-
+import instaloader
+import yt_dlp
+import cloudinary.uploader
+from django.conf import settings
+from django.core.files import File
+import os
+import json
 logger = logging.getLogger('app_logger')
-# Create your views here.
 
 
+def download_and_upload_instagram_video(url, language="english"):
+    temp_dir = "memeverse"
+    os.makedirs(temp_dir, exist_ok=True)
+
+    ydl_opts = {
+        'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+        'format': 'best',
+        'merge_output_format': 'mp4',
+        'quiet': True,
+    }
+
+    # 🔹 Step 1: Download + Extract metadata
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=True)
+
+        file_path = ydl.prepare_filename(info)
+        if not file_path.endswith('.mp4'):
+            file_path = f"{os.path.splitext(file_path)[0]}.mp4"
+
+    # 🔹 Step 2: Extract details from metadata
+    title = info.get("title") or "Instagram Video"
+    description = info.get("description") or ""
+    uploader = info.get("uploader") or info.get("uploader_id") or "unknown"
+
+    # Extract hashtags as tags
+    tags = []
+    if description:
+        tags = [word for word in description.split() if word.startswith("#")]
+    tags_str = ",".join(tags) if tags else ""
+
+    # 🔹 Step 3: Upload to Cloudinary
+    upload_result = cloudinary.uploader.upload(
+        file_path,
+        resource_type="video",
+        folder="instagram_memes"
+    )
+
+    thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("url")
+
+    # 🔹 Step 4: Save to Django model
+    meme = Memes.objects.create(
+        title=title,
+        file=upload_result["secure_url"],
+        thumbnail=thumbnail_url,
+        type="video",
+        tags=tags_str,
+        user_name=uploader,
+        language=language
+    )
+
+    # 🔹 Step 5: Cleanup local file
+    os.remove(file_path)
+    return meme
+def instagram_login():
+    L = instaloader.Instaloader()
+    username = "shailajakathi85@gmail.com"
+    password = "Vasu@1918"
+
+    print("Logging into Instagram...")
+    L.login(username, password)
+    L.save_session_to_file()
+    print("✅ Session saved successfully!")
+
+def fetch_instagram_video():
+    url = "https://www.instagram.com/reel/DPyZm0SkyG7/?utm_source=ig_web_copy_link&igsh=aWE4Nm1xYTF0bGgx"
+    meme = download_and_upload_instagram_video(
+    url
+)
+
+    print("✅ Uploaded to Cloudinary")
 def get_memes(request):
     try:
         type = request.GET.get('meme_type', None)
@@ -25,6 +99,7 @@ def get_memes(request):
             print(i["file_url"])
             try:
                 i["file_url"] = i["file_url"].replace("http://", "https://")
+            
             except:
                 pass    
         return JsonResponse({"status": "success", "data": data})
@@ -32,7 +107,11 @@ def get_memes(request):
         return JsonResponse({"status": "error", "message": str(e)})
     
 def privacy_policy(request):
-    logger.info("Privacy policy page accessed")
+    print("inside privacy policy")
+    # instagram_login()
+    # fetch_instagram_video()
+    print("sucessfully uploaded")
+    # logger.info("Privacy policy page accessed")
     html_content = """
     <html>
     <head><title>Privacy Policy</title></head>
@@ -48,6 +127,10 @@ def privacy_policy(request):
     </html>
     """
     return HttpResponse(html_content)
+
+
+
+
 
 @csrf_exempt
 def webhook(request):
@@ -66,10 +149,25 @@ def webhook(request):
         # Handle webhook events (Instagram sends updates here)
         try:
             data = request.body.decode('utf-8')
-            logger.info(f"Received Webhook Event: {data}")
+            data = json.loads(data)
+
+            # Extract message text safely
+            entry = data.get("entry", [])[0]
+            messaging = entry.get("messaging", [])[0]
+            message_obj = messaging.get("message", {})
+
+            message_text = message_obj.get("text")
+            sender_id = messaging.get("sender", {}).get("id")
+            if message_text:
+                url = message_text
+                download_and_upload_instagram_video(url)
+                logger.info("uploaded successfully")
+            # logger.info(f"Received Webhook Event: {data}")
             return JsonResponse({'status': 'received'}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
     else:
         return HttpResponse(status=405)
+
+
