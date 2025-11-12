@@ -21,17 +21,21 @@ def login_and_save_cookies(username, password):
     """
     Logs into Instagram using Instaloader (no GUI needed) and saves cookies.
     """
-    print("🔐 Logging in to Instagram...")
-    loader = instaloader.Instaloader()
-    loader.login(username, password)
-    # Save cookies in yt-dlp compatible format
-    session_file = f"{username}.session"
-    loader.save_session_to_file(session_file)
-    # Convert to yt-dlp cookies.txt
-    with open(session_file, "r") as src, open(COOKIES_PATH, "w") as dest:
-        for line in src:
-            dest.write(line)
-    print("✅ Cookies saved successfully!")
+    logging.info("Logging into Instagram to save cookies")
+    try:
+        loader = instaloader.Instaloader()
+        loader.login(username, password)
+        # Save cookies in yt-dlp compatible format
+        session_file = f"{username}.session"
+        loader.save_session_to_file(session_file)
+        # Convert to yt-dlp cookies.txt
+        with open(session_file, "r") as src, open(COOKIES_PATH, "w") as dest:
+            for line in src:
+                dest.write(line)
+        logger.info("Instagram login successful, cookies saved.")
+    except Exception as e:
+        logger.error(f"Instagram login failed: {str(e)}")   
+
 
 
 def download_and_upload_instagram_video(url, language="english"):
