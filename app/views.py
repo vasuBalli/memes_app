@@ -43,7 +43,7 @@ def download_and_upload_instagram_video(url, language="english"):
     try:
         temp_dir = "memeverse"
         os.makedirs(temp_dir, exist_ok=True)
-
+        logging.info("cookies path : "+COOKIES_PATH)
         ydl_opts = {
             'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
             'cookies': COOKIES_PATH,
