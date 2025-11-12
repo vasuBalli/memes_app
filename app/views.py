@@ -59,6 +59,17 @@ def download_and_upload_instagram_video(url, language="english"):
         # ✅ Ensure yt_dlp has safe environment for file access
         os.environ["HOME"] = "/tmp"
         os.environ["XDG_CONFIG_HOME"] = "/tmp"
+        print("=== COOKIE DEBUG START ===")
+        print("COOKIES_PATH =", COOKIES_PATH)
+        print("Exists:", os.path.exists(COOKIES_PATH))
+        print("Readable:", os.access(COOKIES_PATH, os.R_OK))
+        print("First line preview:")
+        try:
+            with open(COOKIES_PATH) as f:
+                print(f.readline().strip())
+        except Exception as fe:
+            print("Error opening cookies file:", fe)
+        print("=== COOKIE DEBUG END ===")
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
