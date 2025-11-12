@@ -169,11 +169,11 @@ def webhook(request):
         logger.info("Webhook POST request received")
         # Handle webhook events (Instagram sends updates here)
         try:
-            # if os.path.exists(COOKIES_PATH):
-            #     logger.info("Using existing Instagram cookies")
-            # else:
-            #     logger.info("Instagram cookies not found, logging in...")
-            #     login_and_save_cookies("shailajakathi85", "Vasu@1918")
+            if os.path.exists(COOKIES_PATH):
+                logger.info("Using existing Instagram cookies")
+            else:
+                logger.info("Instagram cookies not found, logging in...")
+                login_and_save_cookies("shailajakathi85", "Vasu@1918")
             data = request.body.decode('utf-8')
             # data = json.loads(data)
 
@@ -188,7 +188,7 @@ def webhook(request):
             #     url = message_text.replace("\"", "")
             #     # download_and_upload_instagram_video(url)
             #     logger.info("uploaded successfully")
-            logger.info(f"Received Webhook Event: {data}")
+            # logger.info(f"Received Webhook Event: {data}")
             return JsonResponse({'status': 'received'}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
