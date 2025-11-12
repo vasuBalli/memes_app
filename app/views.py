@@ -39,11 +39,11 @@ def login_and_save_cookies(username, password):
 
 
 def download_and_upload_instagram_video(url, language="english"):
-    logging.info(f"Downloading Instagram video from URL: {url}")
+    logger.info(f"Downloading Instagram video from URL: {url}")
     try:
         temp_dir = "memeverse"
         os.makedirs(temp_dir, exist_ok=True)
-        logging.info("cookies path : "+COOKIES_PATH)
+        logger.info("cookies path : "+COOKIES_PATH)
         ydl_opts = {
             'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
             'cookies': COOKIES_PATH,
@@ -99,13 +99,8 @@ def download_and_upload_instagram_video(url, language="english"):
           
 
 
-def fetch_instagram_video():
-    url = "https://www.instagram.com/reel/DPyZm0SkyG7/?utm_source=ig_web_copy_link&igsh=aWE4Nm1xYTF0bGgx"
-    meme = download_and_upload_instagram_video(
-    url
-)
 
-    print("✅ Uploaded to Cloudinary")
+
 def get_memes(request):
     logger.info("get_memes endpoint accessed")
     try:
