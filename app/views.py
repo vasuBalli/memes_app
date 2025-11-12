@@ -39,61 +39,78 @@ def login_and_save_cookies(username, password):
 
 
 def download_and_upload_instagram_video(url, language="english"):
-    logging.info(f"Downloading Instagram video from URL: {url}")
+    logger.info(f"Downloading Instagram video from URL: {url}")
     try:
         temp_dir = "memeverse"
         os.makedirs(temp_dir, exist_ok=True)
-
-        print(f"Using cookies from: {COOKIES_PATH}")
-
+        logger.info("cookies path : "+COOKIES_PATH)
         ydl_opts = {
             'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
             'cookies': COOKIES_PATH,
             'format': 'best',
             'merge_output_format': 'mp4',
             'quiet': False,
-            'verbose': True,
             'noplaylist': True,
+            'no_cookies_update': True,
+            'retries': 3,
+            'http_headers': {
+                'User-Agent': (
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                    'AppleWebKit/537.36 (KHTML, like Gecko) '
+                    'Chrome/125.0 Safari/537.36'
+                ),
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    },
         }
 
-        # ✅ Ensure yt_dlp has safe environment for file access
-        os.environ["HOME"] = "/tmp"
-        os.environ["XDG_CONFIG_HOME"] = "/tmp"
-        logger.info("=== COOKIE DEBUG START ===")
-        logger.info("COOKIES_PATH =", COOKIES_PATH)
-        logger.info("Exists:", os.path.exists(COOKIES_PATH))
-        logger.info("Readable:", os.access(COOKIES_PATH, os.R_OK))
-        logger.info("First line preview:")
-        try:
-            with open(COOKIES_PATH) as f:
-                logger.info(f.readline().strip())
-        except Exception as fe:
-            logger.info("Error opening cookies file:", fe)
-        logger.info("=== COOKIE DEBUG END ===")
-
+        # 🔹 Step 1: Download + Extract metadata
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
+
             file_path = ydl.prepare_filename(info)
             if not file_path.endswith('.mp4'):
                 file_path = f"{os.path.splitext(file_path)[0]}.mp4"
 
+        # 🔹 Step 2: Extract details from metadata
         title = info.get("title") or "Instagram Video"
         description = info.get("description") or ""
         uploader = info.get("uploader") or info.get("uploader_id") or "unknown"
-        tags = ",".join([word for word in description.split() if word.startswith("#")])
 
-        # upload_result = cloudinary.uploader.upload(
-        #     file_path, resource_type="video", folder="instagram_memes"
-        # )
+        # Extract hashtags as tags
+        tags = []
+        if description:
+            tags = [word for word in description.split() if word.startswith("#")]
+        tags_str = ",".join(tags) if tags else ""
 
-        # os.remove(file_path)
-        logger.info(f"Downloaded and processed ")
-        return "none"
+        # 🔹 Step 3: Upload to Cloudinary
+        upload_result = cloudinary.uploader.upload(
+            file_path,
+            resource_type="video",
+            folder="instagram_memes"
+        )
 
+        thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("url")
+
+        # 🔹 Step 4: Save to Django model
+        meme = Memes.objects.create(
+            title=title,
+            file=upload_result["secure_url"],
+            thumbnail=thumbnail_url,
+            type="video",
+            tags=tags_str,
+            user_name=uploader,
+            language=language
+        )
+
+        # 🔹 Step 5: Cleanup local file
+        os.remove(file_path)
+        return meme
     except Exception as e:
         import traceback
         logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
         logger.error(traceback.format_exc())
+
 
 
 
