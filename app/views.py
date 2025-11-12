@@ -39,59 +39,64 @@ def login_and_save_cookies(username, password):
 
 
 def download_and_upload_instagram_video(url, language="english"):
-    temp_dir = "memeverse"
-    os.makedirs(temp_dir, exist_ok=True)
+    logging.info(f"Downloading Instagram video from URL: {url}")
+    try:
+        temp_dir = "memeverse"
+        os.makedirs(temp_dir, exist_ok=True)
 
-    ydl_opts = {
-        'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
-        'cookies': COOKIES_PATH,
-        'format': 'best',
-        'merge_output_format': 'mp4',
-        'quiet': True,
-    }
+        ydl_opts = {
+            'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+            'cookies': COOKIES_PATH,
+            'format': 'best',
+            'merge_output_format': 'mp4',
+            'quiet': True,
+        }
 
-    # 🔹 Step 1: Download + Extract metadata
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
+        # 🔹 Step 1: Download + Extract metadata
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
 
-        file_path = ydl.prepare_filename(info)
-        if not file_path.endswith('.mp4'):
-            file_path = f"{os.path.splitext(file_path)[0]}.mp4"
+            file_path = ydl.prepare_filename(info)
+            if not file_path.endswith('.mp4'):
+                file_path = f"{os.path.splitext(file_path)[0]}.mp4"
 
-    # 🔹 Step 2: Extract details from metadata
-    title = info.get("title") or "Instagram Video"
-    description = info.get("description") or ""
-    uploader = info.get("uploader") or info.get("uploader_id") or "unknown"
+        # 🔹 Step 2: Extract details from metadata
+        title = info.get("title") or "Instagram Video"
+        description = info.get("description") or ""
+        uploader = info.get("uploader") or info.get("uploader_id") or "unknown"
 
-    # Extract hashtags as tags
-    tags = []
-    if description:
-        tags = [word for word in description.split() if word.startswith("#")]
-    tags_str = ",".join(tags) if tags else ""
+        # Extract hashtags as tags
+        tags = []
+        if description:
+            tags = [word for word in description.split() if word.startswith("#")]
+        tags_str = ",".join(tags) if tags else ""
 
-    # 🔹 Step 3: Upload to Cloudinary
-    upload_result = cloudinary.uploader.upload(
-        file_path,
-        resource_type="video",
-        folder="instagram_memes"
-    )
+        # 🔹 Step 3: Upload to Cloudinary
+        upload_result = cloudinary.uploader.upload(
+            file_path,
+            resource_type="video",
+            folder="instagram_memes"
+        )
 
-    thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("url")
+        thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("url")
 
-    # 🔹 Step 4: Save to Django model
-    meme = Memes.objects.create(
-        title=title,
-        file=upload_result["secure_url"],
-        thumbnail=thumbnail_url,
-        type="video",
-        tags=tags_str,
-        user_name=uploader,
-        language=language
-    )
+        # 🔹 Step 4: Save to Django model
+        meme = Memes.objects.create(
+            title=title,
+            file=upload_result["secure_url"],
+            thumbnail=thumbnail_url,
+            type="video",
+            tags=tags_str,
+            user_name=uploader,
+            language=language
+        )
 
-    # 🔹 Step 5: Cleanup local file
-    os.remove(file_path)
-    return meme
+        # 🔹 Step 5: Cleanup local file
+        os.remove(file_path)
+        return meme
+    except Exception as e:
+        logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
+          
 
 
 def fetch_instagram_video():
