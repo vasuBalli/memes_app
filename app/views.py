@@ -49,7 +49,8 @@ def download_and_upload_instagram_video(url, language="english"):
             'cookies': COOKIES_PATH,
             'format': 'best',
             'merge_output_format': 'mp4',
-            'quiet': True,
+            'quiet': False,       # ✅ Show output
+            'verbose': True, 
         }
 
         # 🔹 Step 1: Download + Extract metadata
@@ -95,7 +96,9 @@ def download_and_upload_instagram_video(url, language="english"):
         os.remove(file_path)
         return meme
     except Exception as e:
+        import traceback
         logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
+        logger.error(traceback.format_exc())
           
 
 
