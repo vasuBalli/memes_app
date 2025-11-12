@@ -13,6 +13,26 @@ import os
 import json
 logger = logging.getLogger('app_logger')
 
+COOKIES_PATH = "/home/ubuntu/memes_app/instagram_cookies.txt"
+
+
+
+def login_and_save_cookies(username, password):
+    """
+    Logs into Instagram using Instaloader (no GUI needed) and saves cookies.
+    """
+    print("🔐 Logging in to Instagram...")
+    loader = instaloader.Instaloader()
+    loader.login(username, password)
+    # Save cookies in yt-dlp compatible format
+    session_file = f"{username}.session"
+    loader.save_session_to_file(session_file)
+    # Convert to yt-dlp cookies.txt
+    with open(session_file, "r") as src, open(COOKIES_PATH, "w") as dest:
+        for line in src:
+            dest.write(line)
+    print("✅ Cookies saved successfully!")
+
 
 def download_and_upload_instagram_video(url, language="english"):
     temp_dir = "memeverse"
@@ -20,6 +40,7 @@ def download_and_upload_instagram_video(url, language="english"):
 
     ydl_opts = {
         'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+        'cookies': COOKIES_PATH,
         'format': 'best',
         'merge_output_format': 'mp4',
         'quiet': True,
@@ -67,15 +88,7 @@ def download_and_upload_instagram_video(url, language="english"):
     # 🔹 Step 5: Cleanup local file
     os.remove(file_path)
     return meme
-def instagram_login():
-    L = instaloader.Instaloader()
-    username = "shailajakathi85@gmail.com"
-    password = "Vasu@1918"
 
-    print("Logging into Instagram...")
-    L.login(username, password)
-    L.save_session_to_file()
-    print("✅ Session saved successfully!")
 
 def fetch_instagram_video():
     url = "https://www.instagram.com/reel/DPyZm0SkyG7/?utm_source=ig_web_copy_link&igsh=aWE4Nm1xYTF0bGgx"
@@ -111,7 +124,7 @@ def get_memes(request):
     
 def privacy_policy(request):
     logger.info("Privacy policy page accessed")
-    # instagram_login()
+   
     # fetch_instagram_video()
     print("sucessfully uploaded")
     # logger.info("Privacy policy page accessed")
@@ -149,8 +162,14 @@ def webhook(request):
             return HttpResponse('Verification failed', status=403)
         
     elif request.method == 'POST':
+        logger.info("Webhook POST request received")
         # Handle webhook events (Instagram sends updates here)
         try:
+            if os.path.exists(COOKIES_PATH):
+                logger.info("Using existing Instagram cookies")
+            else:
+                logger.info("Instagram cookies not found, logging in...")
+                login_and_save_cookies("shailajakathi85", "Vasu@1918")
             data = request.body.decode('utf-8')
             data = json.loads(data)
 
