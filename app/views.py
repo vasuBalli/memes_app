@@ -229,6 +229,7 @@ def webhook(request):
             sender_id = messaging.get("sender", {}).get("id")
             if message_text:
                 url = message_text.replace("\"", "")
+                logger.info("download started ")
                 # download_and_upload_instagram_video(url)
                 x = download_instagram_video(url)
                 logger.info(f"Video downloaded to: {x}")
