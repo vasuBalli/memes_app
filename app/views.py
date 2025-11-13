@@ -39,6 +39,30 @@ def login_and_save_cookies(username, password):
     except Exception as e:
         logger.error(f"Instagram login failed: {str(e)}")   
 
+def get_memes(request):
+    logger.info("get_memes endpoint accessed")
+    try:
+        logger.info("Fetching memes from database")
+        type = request.GET.get('meme_type', None)
+        if type is None:
+            queryset = Memes.objects.all().order_by('-created_at') # newest first
+            
+        else:
+            queryset = Memes.objects.all().order_by('-created_at').filter(type = type) # newest first
+        serializer = MemesSerializer(queryset, many=True)
+        data =serializer.data
+        logger.info(f"Fetched {len(data)} memes")
+        for i in data:
+            print(i["file_url"])
+            try:
+                i["file_url"] = i["file_url"].replace("http://", "https://")
+            #s
+            except:
+                pass    
+        return JsonResponse({"status": "success", "data": data})
+    except Exception as e:
+        logger.error(f"Error fetching memes: {str(e)}")
+        return JsonResponse({"status": "error", "message": str(e)})
 
 
 def download_and_upload_instagram_video(url, language="english"):
@@ -130,9 +154,8 @@ def download_and_upload_instagram_video(url, language="english"):
 
 SESSION_FILE = os.path.join(settings.BASE_DIR, "insta_session.json")
 TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
-
 def download_instagram_video(url,language="english"):
-    logger.info(f"Downloading Instagram video from URL: {url}")
+    logger.info(f"Downloading Instagram video from URL: {url}") 
     os.makedirs(TEMP_DIR, exist_ok=True)
 
     cl = Client()
@@ -140,6 +163,7 @@ def download_instagram_video(url,language="english"):
     # Load previous session if exists
     if os.path.exists(SESSION_FILE):
         cl.load_settings(SESSION_FILE)
+        logger.info("Loaded Instagram session from file.")
 
     # Login (fast login using session)
     cl.login("shailajakathi85", "Vasu@1918")
@@ -162,15 +186,14 @@ def download_instagram_video(url,language="english"):
     media = cl.media_info(media_pk)
 
     # Title extraction (caption is best)
-    
     title = media.caption_text if media.caption_text else "Instagram Video"
-    logger.info("Media caption: %s", title)
+    logger.info(f"Extracted title: {title}")
     # Description
     description = media.caption_text or ""
 
     # Uploader username
     uploader = media.user.username
-    logger.info("Uploader username: %s", uploader)
+    description = media.caption_text or ""
     # Extract tags from description
     tags = [w for w in description.split() if w.startswith("#")]
     tags_str = ",".join(tags) if tags else ""
@@ -183,7 +206,7 @@ def download_instagram_video(url,language="english"):
     file_path = os.path.join(TEMP_DIR, f"{media_pk}.mp4")
     with open(file_path, "wb") as f:
         f.write(requests.get(video_url).content)
-    logger.info(f"Video downloaded to: {file_path}")
+    logger.info(f"Downloaded video to: {file_path}")
     # ====================================================================================
     # STEP 4: Upload to Cloudinary
     # ====================================================================================
@@ -192,14 +215,13 @@ def download_instagram_video(url,language="english"):
         resource_type="video",
         folder="instagram_memes"
     )
-    logger.info("uploaded to cloudinary successfully")
+    logger.info(f"Uploaded video to Cloudinary: {upload_result['secure_url']}")
     secure_url = upload_result["secure_url"]
     thumbnail_url = upload_result.get("thumbnail_url") or secure_url
 
     # ====================================================================================
     # STEP 5: Save in Django Model
     # ====================================================================================
-    logger.info("Saving meme to database")
     meme = Memes.objects.create(
         title=title,
         file=secure_url,
@@ -209,7 +231,8 @@ def download_instagram_video(url,language="english"):
         user_name=uploader,
         language=language.lower()
     )
-    logger.info("Meme saved with ID: %s", meme.id)
+    logger.info(f"Saved meme in database with ID: {meme.id}")
+
     # Cleanup
     os.remove(file_path)
     cache.delete(f"downloading_{media_pk}")
