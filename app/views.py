@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.files import File
 import os
 import json
+from instagrapi import Client
 logger = logging.getLogger('app_logger')
 
 COOKIES_PATH = "/home/ubuntu/memes_app/instagram_cookies.txt"
@@ -123,7 +124,16 @@ def download_and_upload_instagram_video(url, language="english"):
         logger.error(traceback.format_exc())
 
 
+def download_instagram_video(url):
+    cl = Client()
 
+    # login (session saved so you don't login every time)
+    cl.login("shailajakathi85", "Vasu@1918")
+
+    media_pk = cl.media_pk_from_url(url)
+    video_path = cl.video_download(media_pk)
+
+    return video_path
 
 
 def get_memes(request):
@@ -211,7 +221,8 @@ def webhook(request):
             sender_id = messaging.get("sender", {}).get("id")
             if message_text:
                 url = message_text.replace("\"", "")
-                download_and_upload_instagram_video(url)
+                # download_and_upload_instagram_video(url)
+                download_instagram_video(url)
                 logger.info("uploaded successfully")
             # logger.info(f"Received Webhook Event: {data}")
             return JsonResponse({'status': 'received'}, status=200)
