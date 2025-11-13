@@ -39,12 +39,14 @@ def login_and_save_cookies(username, password):
 
 
 def download_and_upload_instagram_video(url, language="english"):
-    import re
     logger.info(f"Downloading Instagram video from URL: {url}")
-    import yt_dlp
     import sys
-    logger.info(f"Django Python: {sys.executable}")
-    logger.info(f"yt-dlp version: {yt_dlp.__version__}")
+    
+
+    logger.info("DJANGO PYTHON: %s", sys.executable)
+    logger.info("DJANGO yt-dlp path: %s", yt_dlp.__file__)
+    logger.info("DJANGO yt-dlp version: %s", yt_dlp.__version__)
+
 
     try:
         temp_dir = "memeverse"
