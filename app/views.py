@@ -130,18 +130,22 @@ def download_and_upload_instagram_video(url, language="english"):
 SESSION_FILE = os.path.join(settings.BASE_DIR, "insta_session.json")
 
 def download_instagram_video(url):
-    cl = Client()
+    try:
+        cl = Client()
 
-    if os.path.exists(SESSION_FILE):
-        cl.load_settings(SESSION_FILE)
+        if os.path.exists(SESSION_FILE):
+            cl.load_settings(SESSION_FILE)
 
-    cl.login("shailajakathi85", "Vasu@1918")
-    cl.dump_settings(SESSION_FILE)
+        cl.login("shailajakathi85", "Vasu@1918")
+        cl.dump_settings(SESSION_FILE)
 
-    media_pk = cl.media_pk_from_url(url)
-    video_path = cl.video_download(media_pk)
+        media_pk = cl.media_pk_from_url(url)
+        video_path = cl.video_download(media_pk)
 
-    return video_path
+        return video_path
+    except Exception as e:  
+        logger.error(f"Error downloading Instagram video: {str(e)}")
+        raise e
 
 
 def get_memes(request):
