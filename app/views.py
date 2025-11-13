@@ -110,8 +110,10 @@ def download_and_upload_instagram_video(url, language="english"):
         return meme
     except Exception as e:
         import traceback
-        pass
-        # logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
+
+        logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
+        logger.info("Cookie file exists:"+ os.path.exists("/home/ubuntu/memes_app/instagram_cookies.txt"))
+        logger.info("Cookie file size:"+ os.path.getsize("/home/ubuntu/memes_app/instagram_cookies.txt"))
         # logger.error(traceback.format_exc())
 
 
