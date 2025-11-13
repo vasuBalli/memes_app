@@ -110,8 +110,9 @@ def download_and_upload_instagram_video(url, language="english"):
         return meme
     except Exception as e:
         import traceback
-        logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
-        logger.error(traceback.format_exc())
+        pass
+        # logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
+        # logger.error(traceback.format_exc())
 
 
 
