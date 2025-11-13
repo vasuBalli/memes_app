@@ -136,93 +136,99 @@ SESSION_FILE = os.path.join(settings.BASE_DIR, "insta_session.json")
 TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
 def download_instagram_video(url,language="english"):
     logger.info(f"Downloading Instagram media from URL: {url}")
-    cl = Client()
+    try:
+        cl = Client()
 
-    # Load saved session (works faster)
-    if os.path.exists(SESSION_FILE):
-        cl.load_settings(SESSION_FILE)
+        # Load saved session (works faster)
+        if os.path.exists(SESSION_FILE):
+            cl.load_settings(SESSION_FILE)
 
-    cl.login("shailajakathi85", "Vasu@1918")
-    cl.dump_settings(SESSION_FILE)
+        cl.login("shailajakathi85", "Vasu@1918")
+        cl.dump_settings(SESSION_FILE)
 
-    # Convert URL → PK
-    media_pk = cl.media_pk_from_url(url)
+        # Convert URL → PK
+        media_pk = cl.media_pk_from_url(url)
 
-    # 🔥 Strong duplicate prevention (2 minutes)
-    lock_key = f"media_download_lock_{media_pk}"
-    if cache.get(lock_key):
-        return None  # skip duplicate call
+        # 🔥 Strong duplicate prevention (2 minutes)
+        lock_key = f"media_download_lock_{media_pk}"
+        if cache.get(lock_key):
+            return None  # skip duplicate call
 
-    cache.set(lock_key, True, 120)
+        cache.set(lock_key, True, 120)
 
-    # ====================================================================================
-    # STEP 1: Fetch full metadata
-    # ====================================================================================
-    media = cl.media_info(media_pk)
+        # ====================================================================================
+        # STEP 1: Fetch full metadata
+        # ====================================================================================
+        media = cl.media_info(media_pk)
 
-    # Title / Caption
-    title = media.caption_text or "Instagram Post"
-    description = media.caption_text or ""
-    uploader = media.user.username
-    logger.info(f"title: {title}, uploader: {uploader}")
-    # Hashtags
-    tags = [w for w in description.split() if w.startswith("#")]
-    tags_str = ",".join(tags)
+        # Title / Caption
+        title = media.caption_text or "Instagram Post"
+        description = media.caption_text or ""
+        uploader = media.user.username
+        logger.info(f"title: {title}, uploader: {uploader}")
+        # Hashtags
+        tags = [w for w in description.split() if w.startswith("#")]
+        tags_str = ",".join(tags)
 
-    # ====================================================================================
-    # STEP 2: Detect media type (video / image)
-    # ====================================================================================
-    is_video = hasattr(media, "video_url") and media.video_url is not None
+        # ====================================================================================
+        # STEP 2: Detect media type (video / image)
+        # ====================================================================================
+        is_video = hasattr(media, "video_url") and media.video_url is not None
 
-    if is_video:
-        file_url = media.video_url
-        ext = "mp4"
-        file_type = "video"
-    else:
-        # Instagram images are under media.thumbnail_url
-        file_url = media.thumbnail_url or media.resources[0].thumbnail_url
-        ext = "jpg"
-        file_type = "image"
-    logger.info(f"Detected media type: {file_type}")
-    # ====================================================================================
-    # STEP 3: Download file locally
-    # ====================================================================================
-    local_path = os.path.join(TEMP_DIR, f"{media_pk}.{ext}")
+        if is_video:
+            file_url = media.video_url
+            ext = "mp4"
+            file_type = "video"
+        else:
+            # Instagram images are under media.thumbnail_url
+            file_url = media.thumbnail_url or media.resources[0].thumbnail_url
+            ext = "jpg"
+            file_type = "image"
+        logger.info(f"Detected media type: {file_type}")
+        # ====================================================================================
+        # STEP 3: Download file locally
+        # ====================================================================================
+        local_path = os.path.join(TEMP_DIR, f"{media_pk}.{ext}")
 
-    with open(local_path, "wb") as f:
-        f.write(requests.get(file_url).content)
+        with open(local_path, "wb") as f:
+            f.write(requests.get(file_url).content)
 
-    # ====================================================================================
-    # STEP 4: Upload to Cloudinary
-    # ====================================================================================
-    upload = cloudinary.uploader.upload(
-        local_path,
-        resource_type="video" if is_video else "image",
-        folder="instagram_memes"
-    )
-    logger.info(f"Uploaded to Cloudinary: {upload.get('secure_url')}")
+        # ====================================================================================
+        # STEP 4: Upload to Cloudinary
+        # ====================================================================================
+        upload = cloudinary.uploader.upload(
+            local_path,
+            resource_type="video" if is_video else "image",
+            folder="instagram_memes"
+        )
+        logger.info(f"Uploaded to Cloudinary: {upload.get('secure_url')}")
 
-    cloud_url = upload["secure_url"]
-    thumbnail_url = upload.get("thumbnail_url") or cloud_url
+        cloud_url = upload["secure_url"]
+        thumbnail_url = upload.get("thumbnail_url") or cloud_url
 
-    # ====================================================================================
-    # STEP 5: Save in DB
-    # ====================================================================================
-    meme = Memes.objects.create(
-        title=title,
-        file=cloud_url,
-        thumbnail=thumbnail_url,
-        type=file_type,      # ⭐ image or video automatically
-        tags=tags_str,
-        user_name=uploader,
-        language=language.lower()
-    )
+        # ====================================================================================
+        # STEP 5: Save in DB
+        # ====================================================================================
+        meme = Memes.objects.create(
+            title=title,
+            file=cloud_url,
+            thumbnail=thumbnail_url,
+            type=file_type,      # ⭐ image or video automatically
+            tags=tags_str,
+            user_name=uploader,
+            language=language.lower()
+        )
 
-    # Cleanup
-    os.remove(local_path)
-    cache.delete(lock_key)
+        # Cleanup
+        os.remove(local_path)
+        cache.delete(lock_key)
 
-    return meme
+        return meme
+    except Exception as e:
+        import traceback
+
+        logger.error(f"Error downloading/uploading Instagram media: {str(e)}")
+        logger.error(traceback.format_exc())
     
 def privacy_policy(request):
     logger.info("Privacy policy page accessed")
