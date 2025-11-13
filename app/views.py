@@ -130,105 +130,82 @@ def download_and_upload_instagram_video(url, language="english"):
         logger.error(traceback.format_exc())
 
 
+def clean_webhook_url(url: str) -> str:
+    # Instagram webhook URL contains escaped slashes
+    url = url.replace("\\/", "/")
+
+    # Some webhook implementations escape backslashes too
+    url = url.replace("\\", "")
+
+    return url
 
 
 SESSION_FILE = os.path.join(settings.BASE_DIR, "insta_session.json")
 TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
-def download_instagram_video(url,language="english"):
-    logger.info(f"Downloading Instagram media from URL: {url}")
+def download_instagram_video(payload,language="english"):
+    logger.info(f"Downloading Instagram video from webhook payload")
     try:
-        cl = Client()
+        attachment = payload["entry"][0]["messaging"][0]["message"]["attachments"][0]
+        media_type = attachment["type"]                       # ig_reel / image / video
+        reel_id = attachment["payload"].get("reel_video_id")
+        title = attachment["payload"].get("title", "Instagram Media")
+        media_url = clean_webhook_url(attachment["payload"]["url"])   
+        
 
-        # Load saved session (works faster)
-        if os.path.exists(SESSION_FILE):
-            cl.load_settings(SESSION_FILE)
+        # 🔥 Extract tags from title
+        tags_list = []
+        if title:
+            tags_list = [w.strip() for w in title.split() if w.startswith("#")]
+        tags = ",".join(tags_list)
+        logger.info(f"Extracted tags: {tags}")
 
-        cl.login("shailajakathi85", "Vasu@1918")
-        cl.dump_settings(SESSION_FILE)
-
-        # Convert URL → PK
-        media_pk = cl.media_pk_from_url(url)
-
-        # 🔥 Strong duplicate prevention (2 minutes)
-        lock_key = f"media_download_lock_{media_pk}"
+        # Prevent duplicates
+        lock_key = f"webhook_{reel_id}"
         if cache.get(lock_key):
-            return None  # skip duplicate call
-
+            return None
+        
         cache.set(lock_key, True, 120)
 
-        # ====================================================================================
-        # STEP 1: Fetch full metadata
-        # ====================================================================================
-        media = cl.media_info(media_pk)
+        # File type
+        ext = "mp4" if media_type == "ig_reel" else "jpg"
+        local_path = os.path.join(TEMP_DIR, f"{reel_id}.{ext}")
 
-        # Title / Caption
-        title = media.caption_text or "Instagram Post"
-        description = media.caption_text or ""
-        uploader = media.user.username
-        logger.info(f"title: {title}, uploader: {uploader}")
-        # Hashtags
-        tags = [w for w in description.split() if w.startswith("#")]
-        tags_str = ",".join(tags)
-
-        # ====================================================================================
-        # STEP 2: Detect media type (video / image)
-        # ====================================================================================
-        is_video = hasattr(media, "video_url") and media.video_url is not None
-
-        if is_video:
-            file_url = media.video_url
-            ext = "mp4"
-            file_type = "video"
-        else:
-            # Instagram images are under media.thumbnail_url
-            file_url = media.thumbnail_url or media.resources[0].thumbnail_url
-            ext = "jpg"
-            file_type = "image"
-        logger.info(f"Detected media type: {file_type}")
-        # ====================================================================================
-        # STEP 3: Download file locally
-        # ====================================================================================
-        local_path = os.path.join(TEMP_DIR, f"{media_pk}.{ext}")
-
+        # Download
         with open(local_path, "wb") as f:
-            f.write(requests.get(file_url).content)
+            f.write(requests.get(media_url).content)
+        logger.info(f"Downloaded Instagram media to {local_path}")
 
-        # ====================================================================================
-        # STEP 4: Upload to Cloudinary
-        # ====================================================================================
+        # Upload to Cloudinary
         upload = cloudinary.uploader.upload(
             local_path,
-            resource_type="video" if is_video else "image",
+            resource_type="video" if ext == "mp4" else "image",
             folder="instagram_memes"
         )
-        logger.info(f"Uploaded to Cloudinary: {upload.get('secure_url')}")
+        logger.info(f"Uploaded to Cloudinary: {upload['secure_url']}")  
 
         cloud_url = upload["secure_url"]
-        thumbnail_url = upload.get("thumbnail_url") or cloud_url
+        thumbnail = upload.get("thumbnail_url") or cloud_url
 
-        # ====================================================================================
-        # STEP 5: Save in DB
-        # ====================================================================================
         meme = Memes.objects.create(
             title=title,
             file=cloud_url,
-            thumbnail=thumbnail_url,
-            type=file_type,      # ⭐ image or video automatically
-            tags=tags_str,
-            user_name=uploader,
-            language=language.lower()
+            thumbnail=thumbnail,
+            type="video" if ext == "mp4" else "image",
+            tags=tags,                      # ⭐ TAGS ADDED HERE
+            user_name="instagram_user",
+            language=language
         )
+        logger.info(f"Created Meme object with ID: {meme.id}")
 
-        # Cleanup
         os.remove(local_path)
         cache.delete(lock_key)
 
         return meme
     except Exception as e:
         import traceback
-
-        logger.error(f"Error downloading/uploading Instagram media: {str(e)}")
+        logger.error(f"Error in download_instagram_video: {str(e)}")
         logger.error(traceback.format_exc())
+        return None
     
 def privacy_policy(request):
     logger.info("Privacy policy page accessed")
@@ -273,32 +250,32 @@ def webhook(request):
         logger.info("Webhook POST request received")
         # Handle webhook events (Instagram sends updates here)
         try:
-            if os.path.exists(COOKIES_PATH):
-                logger.info("Using existing Instagram cookies")
-            else:
-                logger.info("Instagram cookies not found, logging in...")
-                login_and_save_cookies("shailajakathi85", "Vasu@1918")
+            # if os.path.exists(COOKIES_PATH):
+            #     logger.info("Using existing Instagram cookies")
+            # else:
+            #     logger.info("Instagram cookies not found, logging in...")
+            #     login_and_save_cookies("shailajakathi85", "Vasu@1918")
             data = request.body.decode('utf-8')
             logger.info(f"Webhook data: {data}")
             data = json.loads(data)
 
           
-            entry = data.get("entry", [])[0]
-            messaging = entry.get("messaging", [])[0]
-            message_obj = messaging.get("message", {})
+            # entry = data.get("entry", [])[0]
+            # messaging = entry.get("messaging", [])[0]
+            # message_obj = messaging.get("message", {})
 
-            message_text = message_obj.get("text")
-            sender_id = messaging.get("sender", {}).get("id")
-            if message_text:
-                url = message_text.replace("\"", "")
-                logger.info("download started ")
+            # message_text = message_obj.get("text")
+            # sender_id = messaging.get("sender", {}).get("id")
+            # if message_text:
+            #     url = message_text.replace("\"", "")
+            #     logger.info("download started ")
                 # download_and_upload_instagram_video(url)
-                if "instagram.com" in url:
-                    x = download_instagram_video(url)
-                    logger.info(f"Video downloaded to: {x}")
-                    logger.info("uploaded successfully")
-                else:
-                    logger.info("Not a valid Instagram URL")
+                # if "instagram.com" in url:
+            x = download_instagram_video(data, language="english")
+            # logger.info(f"Video downloaded to: {x}")
+            logger.info("uploaded successfully")
+                # else:
+                #     logger.info("Not a valid Instagram URL")
             # logger.info(f"Received Webhook Event: {data}")
             return JsonResponse({'status': 'received'}, status=200)
         except Exception as e:
