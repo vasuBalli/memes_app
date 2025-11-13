@@ -53,4 +53,4 @@ jobs:
             python3 manage.py collectstatic --noinput
 
             # Restart Supervisor program
-            sudo supervisorctl restart guni:gunicorn
+            sudo supervisorctl restart gunicorn
