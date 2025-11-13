@@ -174,11 +174,12 @@ def download_instagram_video(url,language="english"):
     # ====================================================================================
     media_pk = cl.media_pk_from_url(url)
 
-    # Prevent duplicate processing
-    if cache.get(f"downloading_{media_pk}"):
-        return None
-
-    cache.set(f"downloading_{media_pk}", True, 30)
+  
+     # 🔥 Strong duplicate prevention (2 minutes)
+    lock_key = f"media_download_lock_{media_pk}"
+    if cache.get(lock_key):
+        return None  # skip duplicate call
+    cache.set(f"downloading_{lock_key}", True, 300)
 
     # ====================================================================================
     # STEP 2: Fetch full metadata
