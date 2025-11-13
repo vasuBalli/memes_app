@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.files import File
 import os
 import json
+from django.conf import settings
 from instagrapi import Client
 logger = logging.getLogger('app_logger')
 
@@ -124,11 +125,18 @@ def download_and_upload_instagram_video(url, language="english"):
         logger.error(traceback.format_exc())
 
 
+
+
+SESSION_FILE = os.path.join(settings.BASE_DIR, "insta_session.json")
+
 def download_instagram_video(url):
     cl = Client()
 
-    # login (session saved so you don't login every time)
+    if os.path.exists(SESSION_FILE):
+        cl.load_settings(SESSION_FILE)
+
     cl.login("shailajakathi85", "Vasu@1918")
+    cl.dump_settings(SESSION_FILE)
 
     media_pk = cl.media_pk_from_url(url)
     video_path = cl.video_download(media_pk)
@@ -222,7 +230,8 @@ def webhook(request):
             if message_text:
                 url = message_text.replace("\"", "")
                 # download_and_upload_instagram_video(url)
-                download_instagram_video(url)
+                x = download_instagram_video(url)
+                logger.info(f"Video downloaded to: {x}")
                 logger.info("uploaded successfully")
             # logger.info(f"Received Webhook Event: {data}")
             return JsonResponse({'status': 'received'}, status=200)
