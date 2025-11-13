@@ -41,13 +41,10 @@ def login_and_save_cookies(username, password):
 def download_and_upload_instagram_video(url, language="english"):
     import re
     logger.info(f"Downloading Instagram video from URL: {url}")
-    cookie_path = "/home/ubuntu/memes_app/instagram_cookies.txt"
-    content = open(cookie_path).read()
-
-    logger.info("sessionid present: %s", bool(re.search(r'sessionid', content)))
-    logger.info("csrftoken present: %s", bool(re.search(r'csrftoken', content)))
-    logger.info("ds_user_id present: %s", bool(re.search(r'ds_user_id', content)))
-    logger.info("mid present: %s", bool(re.search(r'\tmid\t', content)))
+    import yt_dlp
+    import sys
+    logger.info(f"Django Python: {sys.executable}")
+    logger.info(f"yt-dlp version: {yt_dlp.__version__}")
 
     try:
         temp_dir = "memeverse"
