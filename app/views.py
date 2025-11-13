@@ -40,8 +40,9 @@ def login_and_save_cookies(username, password):
 
 def download_and_upload_instagram_video(url, language="english"):
     logger.info(f"Downloading Instagram video from URL: {url}")
-    logger.info("Cookie file exists:"+ os.path.exists("/home/ubuntu/memes_app/instagram_cookies.txt"))
-    logger.info("Cookie file size:"+ os.path.getsize("/home/ubuntu/memes_app/instagram_cookies.txt"))
+    logger.info(f"Cookie file exists: {os.path.exists('/home/ubuntu/memes_app/instagram_cookies.txt')}")
+    logger.info(f"Cookie file size: {os.path.getsize('/home/ubuntu/memes_app/instagram_cookies.txt')}")
+
     try:
         temp_dir = "memeverse"
         os.makedirs(temp_dir, exist_ok=True)
@@ -114,7 +115,7 @@ def download_and_upload_instagram_video(url, language="english"):
         logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
         logger.info("Cookie file exists:"+ os.path.exists("/home/ubuntu/memes_app/instagram_cookies.txt"))
         logger.info("Cookie file size:"+ os.path.getsize("/home/ubuntu/memes_app/instagram_cookies.txt"))
-        # logger.error(traceback.format_exc())
+        logger.error(traceback.format_exc())
 
 
 
