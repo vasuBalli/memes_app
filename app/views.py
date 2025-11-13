@@ -13,6 +13,7 @@ import os
 import json
 from django.conf import settings
 from instagrapi import Client
+from django.core.cache import cache
 logger = logging.getLogger('app_logger')
 
 COOKIES_PATH = "/home/ubuntu/memes_app/instagram_cookies.txt"
@@ -128,50 +129,92 @@ def download_and_upload_instagram_video(url, language="english"):
 
 
 SESSION_FILE = os.path.join(settings.BASE_DIR, "insta_session.json")
+TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
 
-def download_instagram_video(url):
-    try:
-        cl = Client()
+def download_instagram_video(url,language="english"):
+    logger.info(f"Downloading Instagram video from URL: {url}")
+    os.makedirs(TEMP_DIR, exist_ok=True)
 
-        if os.path.exists(SESSION_FILE):
-            cl.load_settings(SESSION_FILE)
+    cl = Client()
 
-        cl.login("shailajakathi85", "Vasu@1918")
-        cl.dump_settings(SESSION_FILE)
+    # Load previous session if exists
+    if os.path.exists(SESSION_FILE):
+        cl.load_settings(SESSION_FILE)
 
-        media_pk = cl.media_pk_from_url(url)
-        video_path = cl.video_download(media_pk)
+    # Login (fast login using session)
+    cl.login("shailajakathi85", "Vasu@1918")
+    cl.dump_settings(SESSION_FILE)
 
-        return video_path
-    except Exception as e:  
-        logger.error(f"Error downloading Instagram video: {str(e)}")
-        raise e
+    # ====================================================================================
+    # STEP 1: Convert URL → media PK
+    # ====================================================================================
+    media_pk = cl.media_pk_from_url(url)
 
+    # Prevent duplicate processing
+    if cache.get(f"downloading_{media_pk}"):
+        return None
 
-def get_memes(request):
-    logger.info("get_memes endpoint accessed")
-    try:
-        logger.info("Fetching memes from database")
-        type = request.GET.get('meme_type', None)
-        if type is None:
-            queryset = Memes.objects.all().order_by('-created_at') # newest first
-            
-        else:
-            queryset = Memes.objects.all().order_by('-created_at').filter(type = type) # newest first
-        serializer = MemesSerializer(queryset, many=True)
-        data =serializer.data
-        logger.info(f"Fetched {len(data)} memes")
-        for i in data:
-            print(i["file_url"])
-            try:
-                i["file_url"] = i["file_url"].replace("http://", "https://")
-            #s
-            except:
-                pass    
-        return JsonResponse({"status": "success", "data": data})
-    except Exception as e:
-        logger.error(f"Error fetching memes: {str(e)}")
-        return JsonResponse({"status": "error", "message": str(e)})
+    cache.set(f"downloading_{media_pk}", True, 30)
+
+    # ====================================================================================
+    # STEP 2: Fetch full metadata
+    # ====================================================================================
+    media = cl.media_info(media_pk)
+
+    # Title extraction (caption is best)
+    
+    title = media.caption_text if media.caption_text else "Instagram Video"
+    logger.info("Media caption: %s", title)
+    # Description
+    description = media.caption_text or ""
+
+    # Uploader username
+    uploader = media.user.username
+    logger.info("Uploader username: %s", uploader)
+    # Extract tags from description
+    tags = [w for w in description.split() if w.startswith("#")]
+    tags_str = ",".join(tags) if tags else ""
+
+    # ====================================================================================
+    # STEP 3: Download only the actual video
+    # ====================================================================================
+    video_url = media.video_url
+
+    file_path = os.path.join(TEMP_DIR, f"{media_pk}.mp4")
+    with open(file_path, "wb") as f:
+        f.write(requests.get(video_url).content)
+    logger.info(f"Video downloaded to: {file_path}")
+    # ====================================================================================
+    # STEP 4: Upload to Cloudinary
+    # ====================================================================================
+    upload_result = cloudinary.uploader.upload(
+        file_path,
+        resource_type="video",
+        folder="instagram_memes"
+    )
+    logger.info("uploaded to cloudinary successfully")
+    secure_url = upload_result["secure_url"]
+    thumbnail_url = upload_result.get("thumbnail_url") or secure_url
+
+    # ====================================================================================
+    # STEP 5: Save in Django Model
+    # ====================================================================================
+    logger.info("Saving meme to database")
+    meme = Memes.objects.create(
+        title=title,
+        file=secure_url,
+        thumbnail=thumbnail_url,
+        type="video",
+        tags=tags_str,
+        user_name=uploader,
+        language=language.lower()
+    )
+    logger.info("Meme saved with ID: %s", meme.id)
+    # Cleanup
+    os.remove(file_path)
+    cache.delete(f"downloading_{media_pk}")
+
+    return meme
     
 def privacy_policy(request):
     logger.info("Privacy policy page accessed")
