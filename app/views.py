@@ -192,7 +192,7 @@ def download_instagram_video(payload,language="english"):
             thumbnail=thumbnail,
             type="video" if ext == "mp4" else "image",
             tags=tags,                      # ⭐ TAGS ADDED HERE
-            user_name="instagram_user",
+            user_name="Meme Verse",
             language=language
         )
         logger.info(f"Created Meme object with ID: {meme.id}")
