@@ -14,6 +14,7 @@ import json
 from django.conf import settings
 from instagrapi import Client
 from django.core.cache import cache
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 logger = logging.getLogger('app_logger')
 
 COOKIES_PATH = "/home/ubuntu/memes_app/instagram_cookies.txt"
@@ -45,6 +46,56 @@ def get_memes(request):
         return JsonResponse({"status": "error", "message": str(e)})
 
 
+
+def feed(request):
+    logger.info("feed endpoint accessed")
+
+    try:
+        # meme_type = request.GET.get('meme_type', None)
+        page = request.GET.get('page', 1)
+
+        logger.info(f"Fetching memes for page {page}")
+
+        # Queryset
+       
+        queryset = Memes.objects.all().order_by('-created_at')
+
+        # Pagination (10 per page)
+        paginator = Paginator(queryset, 10)
+
+        try:
+            memes_page = paginator.page(page)
+        except PageNotAnInteger:
+            memes_page = paginator.page(1)
+        except EmptyPage:
+            memes_page = []   # No more pages
+
+        # Serialize
+        serializer = MemesSerializer(memes_page, many=True)
+        memes_data = serializer.data
+
+        # Replace http → https
+        for item in memes_data:
+            try:
+                item["file_url"] = item["file_url"].replace("http://", "https://")
+            except:
+                pass
+
+        logger.info(f"Returned {len(memes_data)} memes on page {page}")
+
+        return JsonResponse({
+            "status": "success",
+            "page": int(page),
+            "total_pages": paginator.num_pages,
+            "total_items": paginator.count,
+            "has_next": memes_page.has_next() if memes_data else False,
+            "has_previous": memes_page.has_previous() if memes_data else False,
+            "data": memes_data
+        })
+
+    except Exception as e:
+        logger.error(f"Error in feed API: {str(e)}")
+        return JsonResponse({"status": "error", "message": str(e)})
 def download_and_upload_instagram_video(url, language="english"):
     logger.info(f"Downloading Instagram video from URL: {url}")
     import sys

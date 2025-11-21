@@ -7,4 +7,5 @@ urlpatterns = [
     path('memes/', get_memes, name='get_memes'),
     path('privacy_policy/', privacy_policy),
     path('webhook/', webhook),
+    path('feed/', feed, name='feed'),
  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
