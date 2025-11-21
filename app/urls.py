@@ -8,4 +8,5 @@ urlpatterns = [
     path('privacy_policy/', privacy_policy),
     path('webhook/', webhook),
     path('feed/', feed, name='feed'),
+    path("reels/", reels_feed, name="reels"),
  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
