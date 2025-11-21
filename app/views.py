@@ -45,6 +45,55 @@ def get_memes(request):
         logger.error(f"Error fetching memes: {str(e)}")
         return JsonResponse({"status": "error", "message": str(e)})
 
+def reels_feed(request):
+    logger.info("reels_feed endpoint accessed")
+
+    try:
+        page = request.GET.get('page', 1)
+        logger.info(f"Fetching reels for page {page}")
+
+        # If your model has "type"
+        queryset = Memes.objects.filter(type="video").order_by('-created_at')
+
+        # If NOT, uncomment this method to filter by file extension:
+        #
+        # queryset = Memes.objects.all()
+        # queryset = [q for q in queryset if q.file_url.lower().endswith(('.mp4', '.mov', '.webm'))]
+
+        paginator = Paginator(queryset, 10)
+
+        try:
+            reels_page = paginator.page(page)
+        except PageNotAnInteger:
+            reels_page = paginator.page(1)
+        except EmptyPage:
+            reels_page = []
+
+        serializer = MemesSerializer(reels_page, many=True)
+        reels_data = serializer.data
+
+        # Replace http → https
+        for item in reels_data:
+            try:
+                item["file_url"] = item["file_url"].replace("http://", "https://")
+            except:
+                pass
+
+        logger.info(f"Returned {len(reels_data)} reels on page {page}")
+
+        return JsonResponse({
+            "status": "success",
+            "page": int(page),
+            "total_pages": paginator.num_pages,
+            "total_items": paginator.count,
+            "has_next": reels_page.has_next() if reels_data else False,
+            "has_previous": reels_page.has_previous() if reels_data else False,
+            "data": reels_data
+        })
+
+    except Exception as e:
+        logger.error(f"Error in reels_feed API: {str(e)}")
+        return JsonResponse({"status": "error", "message": str(e)})
 
 
 def feed(request):
