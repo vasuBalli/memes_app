@@ -225,21 +225,27 @@ def download_instagram_video(payload, language="english"):
         messaging = entry.get("messaging", [])[0]
         attachment = messaging.get("message", {}).get("attachments", [])[0]
 
-        media_type = attachment.get("type")
-        reel_id = attachment.get("payload", {}).get("reel_video_id") or attachment.get("payload", {}).get("id") or "unknown_id"
+        media_type = attachment.get("type")                      # ig_reel / image / video
+        reel_id = attachment.get("payload", {}).get("reel_video_id") \
+                  or attachment.get("payload", {}).get("id") \
+                  or "unknown_id"
+
         title = attachment.get("payload", {}).get("title", "Instagram Media")
         media_url = clean_webhook_url(attachment.get("payload", {}).get("url") or "")
 
+        # Extract hashtags
         tags_list = []
         if title:
             tags_list = [w.lstrip("#") for w in title.split() if w.startswith("#")]
 
+        # Duplicate protection
         lock_key = f"webhook_{reel_id}"
         if cache.get(lock_key):
             logger.info("Duplicate webhook event, skipping.")
             return None
         cache.set(lock_key, True, 120)
 
+        # Decide extension
         ext = "mp4" if media_type == "ig_reel" else "jpg"
         local_path = os.path.join(TEMP_DIR, f"{reel_id}.{ext}")
         os.makedirs(TEMP_DIR, exist_ok=True)
@@ -249,6 +255,7 @@ def download_instagram_video(payload, language="english"):
         with open(local_path, "wb") as f:
             f.write(r.content)
 
+        # Upload to Cloudinary
         upload = cloudinary.uploader.upload(
             local_path,
             resource_type="video" if ext == "mp4" else "image",
@@ -256,12 +263,29 @@ def download_instagram_video(payload, language="english"):
         )
 
         cloud_url = upload.get("secure_url") or upload.get("url")
-        thumbnail = upload.get("thumbnail_url") or cloud_url
 
+        # -----------------------------
+        # ✅ GENERATE THUMBNAIL FOR VIDEO ONLY
+        # -----------------------------
+        thumbnail_url = None
+        public_id = upload.get("public_id")
+        resource_type = upload.get("resource_type")
+
+        if resource_type == "video":
+            # Actual Cloudinary thumbnail
+            thumbnail_url = cloudinary.CloudinaryImage(public_id).video_thumbnail(
+                format="jpg",
+                width=300,
+                height=300,
+                crop="fill"
+            )
+        # For images → thumbnail stays None
+
+        # Save meme document
         meme = Memes(
             title=title,
             file=cloud_url,
-            thumbnail=thumbnail,
+            thumbnail=thumbnail_url,
             type="video" if ext == "mp4" else "image",
             tags=tags_list,
             user_name="Meme Verse",
@@ -269,15 +293,19 @@ def download_instagram_video(payload, language="english"):
         )
         meme.save()
 
+        # Cleanup
         try:
             os.remove(local_path)
         except Exception:
             pass
+
         cache.delete(lock_key)
         return meme
+
     except Exception as e:
         logger.exception("Error in download_instagram_video")
         return None
+
 
 
 def privacy_policy(request):
