@@ -1,318 +1,287 @@
-from .models import Memes
+# app/views.py
 from django.http import HttpResponse, JsonResponse
-from .serializers import MemesSerializer
 from django.views.decorators.csrf import csrf_exempt
-import requests
-import logging
-import instaloader
-import yt_dlp
-import cloudinary.uploader
 from django.conf import settings
-from django.core.files import File
+from django.core.cache import cache
+
+from .models import Memes
+from .serializers import meme_to_dict, memes_list_to_dict
+
 import os
 import json
-from django.conf import settings
-from instagrapi import Client
-from django.core.cache import cache
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import logging
+import requests
+import cloudinary.uploader
+import yt_dlp
+
 logger = logging.getLogger('app_logger')
 
 COOKIES_PATH = "/home/ubuntu/memes_app/instagram_cookies.txt"
+TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
 
+# ---------- Pagination helper ----------
+import math
+def paginate_mongo_queryset(queryset, page=1, per_page=10):
+    if page < 1:
+        page = 1
+    total_items = queryset.count()
+    total_pages = math.ceil(total_items / per_page) if total_items else 0
+    skip = (page - 1) * per_page
+    items = queryset.skip(skip).limit(per_page)
+    return items, total_items, total_pages
+
+# ---------- Endpoints ----------
 
 def get_memes(request):
     logger.info("get_memes endpoint accessed")
     try:
-        logger.info("Fetching memes from database")
-        type = request.GET.get('meme_type', None)
-        if type is None:
-            queryset = Memes.objects.all().order_by('-created_at') # newest first
-            
+        meme_type = request.GET.get('meme_type', None)
+        if meme_type:
+            queryset = Memes.objects(type=meme_type).order_by('-created_at')
         else:
-            queryset = Memes.objects.all().order_by('-created_at').filter(type = type) # newest first
-        serializer = MemesSerializer(queryset, many=True)
-        data =serializer.data
-        logger.info(f"Fetched {len(data)} memes")
+            queryset = Memes.objects.order_by('-created_at')
+
+        # return all (careful on production); better to paginate in feed endpoint
+        data = memes_list_to_dict(queryset)
         for i in data:
-            print(i["file_url"])
-            try:
+            if i.get("file_url"):
                 i["file_url"] = i["file_url"].replace("http://", "https://")
-            #s
-            except:
-                pass    
         return JsonResponse({"status": "success", "data": data})
     except Exception as e:
-        logger.error(f"Error fetching memes: {str(e)}")
-        return JsonResponse({"status": "error", "message": str(e)})
+        logger.exception("Error fetching memes")
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
 
 def reels_feed(request):
     logger.info("reels_feed endpoint accessed")
-
     try:
-        page = request.GET.get('page', 1)
-        logger.info(f"Fetching reels for page {page}")
+        page = int(request.GET.get('page', 1))
+        per_page = int(request.GET.get('per_page', 10))
 
-        # If your model has "type"
-        queryset = Memes.objects.filter(type="video").order_by('-created_at')
+        queryset = Memes.objects(type="video").order_by('-created_at')
 
-        # If NOT, uncomment this method to filter by file extension:
-        #
-        # queryset = Memes.objects.all()
-        # queryset = [q for q in queryset if q.file_url.lower().endswith(('.mp4', '.mov', '.webm'))]
+        items, total_items, total_pages = paginate_mongo_queryset(queryset, page=page, per_page=per_page)
+        data = memes_list_to_dict(items)
 
-        paginator = Paginator(queryset, 10)
-
-        try:
-            reels_page = paginator.page(page)
-        except PageNotAnInteger:
-            reels_page = paginator.page(1)
-        except EmptyPage:
-            reels_page = []
-
-        serializer = MemesSerializer(reels_page, many=True)
-        reels_data = serializer.data
-
-        # Replace http → https
-        for item in reels_data:
-            try:
+        for item in data:
+            if item.get("file_url"):
                 item["file_url"] = item["file_url"].replace("http://", "https://")
-            except:
-                pass
-
-        logger.info(f"Returned {len(reels_data)} reels on page {page}")
 
         return JsonResponse({
             "status": "success",
-            "page": int(page),
-            "total_pages": paginator.num_pages,
-            "total_items": paginator.count,
-            "has_next": reels_page.has_next() if reels_data else False,
-            "has_previous": reels_page.has_previous() if reels_data else False,
-            "data": reels_data
+            "page": page,
+            "per_page": per_page,
+            "total_pages": total_pages,
+            "total_items": total_items,
+            "has_next": page < total_pages,
+            "has_previous": page > 1,
+            "data": data
         })
-
     except Exception as e:
-        logger.error(f"Error in reels_feed API: {str(e)}")
-        return JsonResponse({"status": "error", "message": str(e)})
+        logger.exception("Error in reels_feed API")
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
 
 def feed(request):
     logger.info("feed endpoint accessed")
-
     try:
-        # meme_type = request.GET.get('meme_type', None)
-        page = request.GET.get('page', 1)
+        page = int(request.GET.get('page', 1))
+        per_page = int(request.GET.get('per_page', 10))
 
-        logger.info(f"Fetching memes for page {page}")
+        queryset = Memes.objects.order_by('-created_at')
+        items, total_items, total_pages = paginate_mongo_queryset(queryset, page=page, per_page=per_page)
+        data = memes_list_to_dict(items)
 
-        # Queryset
-       
-        queryset = Memes.objects.all().order_by('-created_at')
-
-        # Pagination (10 per page)
-        paginator = Paginator(queryset, 10)
-
-        try:
-            memes_page = paginator.page(page)
-        except PageNotAnInteger:
-            memes_page = paginator.page(1)
-        except EmptyPage:
-            memes_page = []   # No more pages
-
-        # Serialize
-        serializer = MemesSerializer(memes_page, many=True)
-        memes_data = serializer.data
-
-        # Replace http → https
-        for item in memes_data:
-            try:
+        for item in data:
+            if item.get("file_url"):
                 item["file_url"] = item["file_url"].replace("http://", "https://")
-            except:
-                pass
-
-        logger.info(f"Returned {len(memes_data)} memes on page {page}")
 
         return JsonResponse({
             "status": "success",
-            "page": int(page),
-            "total_pages": paginator.num_pages,
-            "total_items": paginator.count,
-            "has_next": memes_page.has_next() if memes_data else False,
-            "has_previous": memes_page.has_previous() if memes_data else False,
-            "data": memes_data
+            "page": page,
+            "per_page": per_page,
+            "total_pages": total_pages,
+            "total_items": total_items,
+            "has_next": page < total_pages,
+            "has_previous": page > 1,
+            "data": data
         })
-
     except Exception as e:
-        logger.error(f"Error in feed API: {str(e)}")
-        return JsonResponse({"status": "error", "message": str(e)})
+        logger.exception("Error in feed API")
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+# ---------- Instagram download + upload helpers (adapted) ----------
+
 def download_and_upload_instagram_video(url, language="english"):
     logger.info(f"Downloading Instagram video from URL: {url}")
-    import sys
-    
-
-    logger.info("DJANGO PYTHON: %s", sys.executable)
-    logger.info("DJANGO yt-dlp path: %s", yt_dlp.__file__)
-    logger.info("DJANGO yt-dlp version: %s", yt_dlp.__version__)
-
-
     try:
-        temp_dir = "memeverse"
+        temp_dir = TEMP_DIR
         os.makedirs(temp_dir, exist_ok=True)
-        logger.info("cookies path : "+COOKIES_PATH)
         ydl_opts = {
             'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
             'cookies': COOKIES_PATH,
             'format': 'best',
             'merge_output_format': 'mp4',
-            'quiet': False,
+            'quiet': True,
             'noplaylist': True,
             'no_cookies_update': True,
             'retries': 3,
             'http_headers': {
                 'User-Agent': (
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '    
                     'AppleWebKit/537.36 (KHTML, like Gecko) '
                     'Chrome/125.0 Safari/537.36'
                 ),
                 'Accept-Language': 'en-US,en;q=0.9',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    },
+            },
         }
 
-        # 🔹 Step 1: Download + Extract metadata
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
-
             file_path = ydl.prepare_filename(info)
             if not file_path.endswith('.mp4'):
                 file_path = f"{os.path.splitext(file_path)[0]}.mp4"
 
-        # 🔹 Step 2: Extract details from metadata
         title = info.get("title") or "Instagram Video"
         description = info.get("description") or ""
         uploader = info.get("uploader") or info.get("uploader_id") or "unknown"
 
-        # Extract hashtags as tags
         tags = []
         if description:
-            tags = [word for word in description.split() if word.startswith("#")]
-        tags_str = ",".join(tags) if tags else ""
+            tags = [word.lstrip("#") for word in description.split() if word.startswith("#")]
 
-        # 🔹 Step 3: Upload to Cloudinary
+        # Upload to Cloudinary
         upload_result = cloudinary.uploader.upload(
             file_path,
             resource_type="video",
             folder="instagram_memes"
         )
 
-        thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("url")
+        thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("secure_url") or upload_result.get("url")
+        file_secure_url = upload_result.get("secure_url") or upload_result.get("url")
 
-        # 🔹 Step 4: Save to Django model
-        meme = Memes.objects.create(
+        meme = Memes(
             title=title,
-            file=upload_result["secure_url"],
+            file=file_secure_url,
             thumbnail=thumbnail_url,
             type="video",
-            tags=tags_str,
+            tags=tags,
             user_name=uploader,
             language=language
         )
+        meme.save()
 
-        # 🔹 Step 5: Cleanup local file
-        os.remove(file_path)
+        # cleanup
+        try:
+            os.remove(file_path)
+        except Exception:
+            pass
+
         return meme
     except Exception as e:
-        import traceback
-
-        logger.error(f"Error downloading/uploading Instagram video: {str(e)}")
-        logger.info("Cookie file exists:"+ os.path.exists("/home/ubuntu/memes_app/instagram_cookies.txt"))
-        logger.info("Cookie file size:"+ os.path.getsize("/home/ubuntu/memes_app/instagram_cookies.txt"))
-        logger.error(traceback.format_exc())
+        logger.exception("Error in download_and_upload_instagram_video")
+        return None
 
 
 def clean_webhook_url(url: str) -> str:
-    # Instagram webhook URL contains escaped slashes
     url = url.replace("\\/", "/")
-
-    # Some webhook implementations escape backslashes too
     url = url.replace("\\", "")
-
     return url
 
 
-SESSION_FILE = os.path.join(settings.BASE_DIR, "insta_session.json")
-TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
-def download_instagram_video(payload,language="english"):
-    logger.info(f"Downloading Instagram video from webhook payload")
-    try:
-        attachment = payload["entry"][0]["messaging"][0]["message"]["attachments"][0]
-        media_type = attachment["type"]                       # ig_reel / image / video
-        reel_id = attachment["payload"].get("reel_video_id")
-        title = attachment["payload"].get("title", "Instagram Media")
-        media_url = clean_webhook_url(attachment["payload"]["url"])   
-        
+@csrf_exempt
+def webhook(request):
+    logger.info("Webhook endpoint accessed")
+    if request.method == 'GET':
+        try:
+            challenge = request.GET.get('hub.challenge')
+            return HttpResponse(challenge)
+        except Exception as e:
+            logger.exception("Webhook verification failed")
+            return HttpResponse('Verification failed', status=403)
 
-        # 🔥 Extract tags from title
+    elif request.method == 'POST':
+        logger.info("Webhook POST request received")
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            logger.info(f"Webhook payload: {data}")
+
+            x = download_instagram_video(data, language="english")
+            logger.info("uploaded successfully (if not None)")
+            return JsonResponse({'status': 'received'}, status=200)
+        except Exception as e:
+            logger.exception("Error handling webhook POST")
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return HttpResponse(status=405)
+
+
+def download_instagram_video(payload, language="english"):
+    logger.info("download_instagram_video called")
+    try:
+        entry = payload.get("entry", [])[0]
+        messaging = entry.get("messaging", [])[0]
+        attachment = messaging.get("message", {}).get("attachments", [])[0]
+
+        media_type = attachment.get("type")
+        reel_id = attachment.get("payload", {}).get("reel_video_id") or attachment.get("payload", {}).get("id") or "unknown_id"
+        title = attachment.get("payload", {}).get("title", "Instagram Media")
+        media_url = clean_webhook_url(attachment.get("payload", {}).get("url") or "")
+
         tags_list = []
         if title:
-            tags_list = [w.strip() for w in title.split() if w.startswith("#")]
-        tags = ",".join(tags_list)
-        logger.info(f"Extracted tags: {tags}")
+            tags_list = [w.lstrip("#") for w in title.split() if w.startswith("#")]
 
-        # Prevent duplicates
         lock_key = f"webhook_{reel_id}"
         if cache.get(lock_key):
+            logger.info("Duplicate webhook event, skipping.")
             return None
-        
         cache.set(lock_key, True, 120)
 
-        # File type
         ext = "mp4" if media_type == "ig_reel" else "jpg"
         local_path = os.path.join(TEMP_DIR, f"{reel_id}.{ext}")
+        os.makedirs(TEMP_DIR, exist_ok=True)
 
-        # Download
+        # Download media
+        r = requests.get(media_url, timeout=30)
         with open(local_path, "wb") as f:
-            f.write(requests.get(media_url).content)
-        logger.info(f"Downloaded Instagram media to {local_path}")
+            f.write(r.content)
 
-        # Upload to Cloudinary
         upload = cloudinary.uploader.upload(
             local_path,
             resource_type="video" if ext == "mp4" else "image",
             folder="instagram_memes"
         )
-        logger.info(f"Uploaded to Cloudinary: {upload['secure_url']}")  
 
-        cloud_url = upload["secure_url"]
+        cloud_url = upload.get("secure_url") or upload.get("url")
         thumbnail = upload.get("thumbnail_url") or cloud_url
 
-        meme = Memes.objects.create(
+        meme = Memes(
             title=title,
             file=cloud_url,
             thumbnail=thumbnail,
             type="video" if ext == "mp4" else "image",
-            tags=tags,                      # ⭐ TAGS ADDED HERE
+            tags=tags_list,
             user_name="Meme Verse",
             language=language
         )
-        logger.info(f"Created Meme object with ID: {meme.id}")
+        meme.save()
 
-        os.remove(local_path)
+        try:
+            os.remove(local_path)
+        except Exception:
+            pass
         cache.delete(lock_key)
-
         return meme
     except Exception as e:
-        import traceback
-        logger.error(f"Error in download_instagram_video: {str(e)}")
-        logger.error(traceback.format_exc())
+        logger.exception("Error in download_instagram_video")
         return None
-    
+
+
 def privacy_policy(request):
     logger.info("Privacy policy page accessed")
-   
-    # fetch_instagram_video()
-    print("sucessfully uploaded")
-    # logger.info("Privacy policy page accessed")
     html_content = """
     <html>
     <head><title>Privacy Policy</title></head>
@@ -328,60 +297,3 @@ def privacy_policy(request):
     </html>
     """
     return HttpResponse(html_content)
-
-
-
-
-
-@csrf_exempt
-def webhook(request):
-    logger.info("Webhook endpoint accessed")
-    if request.method == 'GET':
-        # Webhook verification (Meta Challenge)
-        try:
-            mode = request.GET.get('hub.mode')
-            token = request.GET.get('hub.verify_token')
-            challenge = request.GET.get('hub.challenge')
-            return HttpResponse(challenge)
-        except Exception as e:
-            return HttpResponse('Verification failed', status=403)
-        
-    elif request.method == 'POST':
-        logger.info("Webhook POST request received")
-        # Handle webhook events (Instagram sends updates here)
-        try:
-            # if os.path.exists(COOKIES_PATH):
-            #     logger.info("Using existing Instagram cookies")
-            # else:
-            #     logger.info("Instagram cookies not found, logging in...")
-            #     login_and_save_cookies("shailajakathi85", "Vasu@1918")
-            data = request.body.decode('utf-8')
-            logger.info(f"Webhook data: {data}")
-            data = json.loads(data)
-
-          
-            # entry = data.get("entry", [])[0]
-            # messaging = entry.get("messaging", [])[0]
-            # message_obj = messaging.get("message", {})
-
-            # message_text = message_obj.get("text")
-            # sender_id = messaging.get("sender", {}).get("id")
-            # if message_text:
-            #     url = message_text.replace("\"", "")
-            #     logger.info("download started ")
-                # download_and_upload_instagram_video(url)
-                # if "instagram.com" in url:
-            x = download_instagram_video(data, language="english")
-            # logger.info(f"Video downloaded to: {x}")
-            logger.info("uploaded successfully")
-                # else:
-                #     logger.info("Not a valid Instagram URL")
-            # logger.info(f"Received Webhook Event: {data}")
-            return JsonResponse({'status': 'received'}, status=200)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-
-    else:
-        return HttpResponse(status=405)
-
-

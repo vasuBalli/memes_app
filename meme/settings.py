@@ -3,6 +3,8 @@ import cloudinary
 # import cloudinary.api
 import os
 from pathlib import Path
+from mongoengine import connect
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,12 +83,18 @@ WSGI_APPLICATION = 'meme.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "meme_db")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://admin:yourpassword@cluster0.mongodb.net/meme_db")
+
+# If using SRV connection string:
+connect(host=MONGO_URI, alias="default")
 
 
 # Password validation

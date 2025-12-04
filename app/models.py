@@ -1,30 +1,23 @@
+# app/models.py
+from mongoengine import Document, StringField, ListField, DateTimeField
+import datetime
 
-from django.db import models
-from cloudinary.models import CloudinaryField
+class Memes(Document):
+    meta = {
+        'collection': 'memes',
+        'indexes': [
+            '-created_at',
+            'tags',
+            'type',
+        ]
+    }
 
-#testingg
-
-class Memes(models.Model):
-    TYPE_CHOICES = (
-        ('image', 'Image'),
-        ('video', 'Video'),
-    )
-    language = (
-        ('telugu', 'Tel'),
-        ('english', 'Eng'),
-    )
-
-    title = models.CharField(max_length=100,null=True, blank=True)
-    file = CloudinaryField(resource_type="auto", null=True, blank=True)
-    tags = models.CharField(max_length=200, blank=True)
-    user_name = models.CharField(max_length=200, blank=True)
-    thumbnail = CloudinaryField(resource_type="auto", null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    type = models.CharField(max_length=50, choices=TYPE_CHOICES, null=True, blank=True)
-    language = models.CharField(max_length=50, choices=language, null=True, blank=True)
-
-    def __str__(self):
-        return self.title
-
-
-
+    title = StringField(max_length=200)
+    # store cloudinary secure URLs as strings
+    file = StringField()
+    tags = ListField(StringField(), default=list)
+    user_name = StringField(max_length=200)
+    thumbnail = StringField()
+    created_at = DateTimeField(default=datetime.datetime.utcnow)
+    type = StringField(choices=('image', 'video'))
+    language = StringField(choices=('telugu', 'english'))
