@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'meme.wsgi.application'
 # }
 
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "meme_db")
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://admin:yourpassword@cluster0.mongodb.net/meme_db")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://randyvasu0_db_user:UOt889NHDHgy5F7Z@cluster0.p9ugx4s.mongodb.net/")
 
 # If using SRV connection string:
 connect(host=MONGO_URI, alias="default")
