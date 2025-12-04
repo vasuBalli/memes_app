@@ -270,6 +270,10 @@ def download_instagram_video(payload, language="english"):
         thumbnail_url = None
         public_id = upload.get("public_id")
         resource_type = upload.get("resource_type")
+        # Fix for cases where public_id missing
+        if isinstance(public_id, str) and ("http" in public_id or "https" in public_id):
+            # These are URLs, not public IDs
+            public_id = public_id.split("/upload/")[1].split(".")[0]
 
         if resource_type == "video":
             # Actual Cloudinary thumbnail
