@@ -273,12 +273,14 @@ def download_instagram_video(payload, language="english"):
 
         if resource_type == "video":
             # Actual Cloudinary thumbnail
+            
             thumbnail_url = cloudinary.CloudinaryImage(public_id).video_thumbnail(
                 format="jpg",
                 width=300,
                 height=300,
                 crop="fill"
-            )
+            ).build_url()
+
         # For images → thumbnail stays None
 
         # Save meme document
