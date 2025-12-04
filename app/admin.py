@@ -1,5 +1,5 @@
 # memes/admin.py
 from django.contrib import admin
-from .models import Memes
+# from .models import Memes
 
-admin.site.register(Memes)
+# admin.site.register(Memes)
