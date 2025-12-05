@@ -6,7 +6,7 @@ from django.core.cache import cache
 
 from .models import Memes
 from .serializers import meme_to_dict, memes_list_to_dict
-
+import magic
 import os
 import json
 import logging
@@ -218,6 +218,7 @@ def webhook(request):
         return HttpResponse(status=405)
 
 
+
 def download_instagram_video(payload, language="english"):
     logger.info("download_instagram_video called")
     try:
@@ -225,85 +226,61 @@ def download_instagram_video(payload, language="english"):
         messaging = entry.get("messaging", [])[0]
         attachment = messaging.get("message", {}).get("attachments", [])[0]
 
-        media_type = attachment.get("type")                      # ig_reel / image / video
-        reel_id = attachment.get("payload", {}).get("reel_video_id") \
-                  or attachment.get("payload", {}).get("id") \
-                  or "unknown_id"
-
-        title = attachment.get("payload", {}).get("title", "Instagram Media")
         media_url = clean_webhook_url(attachment.get("payload", {}).get("url") or "")
+        title = attachment.get("payload", {}).get("title", "Instagram Media")
 
-        # Extract hashtags
-        tags_list = []
-        if title:
-            tags_list = [w.lstrip("#") for w in title.split() if w.startswith("#")]
+        tags_list = [w.lstrip("#") for w in title.split() if w.startswith("#")]
 
-        # Duplicate protection
-        lock_key = f"webhook_{reel_id}"
-        if cache.get(lock_key):
-            logger.info("Duplicate webhook event, skipping.")
-            return None
-        cache.set(lock_key, True, 120)
+        reel_id = (
+            attachment.get("payload", {}).get("reel_video_id")
+            or attachment.get("payload", {}).get("id")
+            or "unknown_id"
+        )
 
-        # Decide extension
-        ext = "mp4" if media_type == "ig_reel" else "jpg"
-        local_path = os.path.join(TEMP_DIR, f"{reel_id}.{ext}")
+        local_path = os.path.join(TEMP_DIR, f"{reel_id}")
         os.makedirs(TEMP_DIR, exist_ok=True)
 
-        # Download media
+        # Download the media
         r = requests.get(media_url, timeout=30)
         with open(local_path, "wb") as f:
             f.write(r.content)
 
-        # Upload to Cloudinary
+        # Detect REAL file type
+        mime = magic.from_file(local_path, mime=True)
+        is_video = "video" in mime
+
+        # Upload to Cloudinary with correct resource type
         upload = cloudinary.uploader.upload(
             local_path,
-            resource_type="video" if ext == "mp4" else "image",
+            resource_type="video" if is_video else "image",
             folder="instagram_memes"
         )
 
-        cloud_url = upload.get("secure_url") or upload.get("url")
+        cloud_url = upload["secure_url"]
 
-        # -----------------------------
-        # ✅ GENERATE THUMBNAIL FOR VIDEO ONLY
-        # -----------------------------
+        # Generate HD thumbnail ONLY for video
         thumbnail_url = None
-        public_id = upload.get("public_id")
-        resource_type = upload.get("resource_type")
-        # Fix for cases where public_id missing
-        if isinstance(public_id, str) and ("http" in public_id or "https" in public_id):
-            # These are URLs, not public IDs
-            public_id = public_id.split("/upload/")[1].split(".")[0]
-
-        if resource_type == "video":
-            # Actual Cloudinary thumbnail
+        if is_video:
+            # cloud_name = settings.CLOUDINARY_STORAGE["CLOUD_NAME"]
+            public_id = upload["public_id"]
             thumbnail_url = (
                 f"https://res.cloudinary.com/dvrmhmvkw/video/upload/"
                 f"c_fill,g_auto:face,h_720,w_720,q_auto:good/{public_id}.jpg"
             )
-            # thumbnail_url = f"https://res.cloudinary.com/dvrmhmvkw/video/upload/c_fill,h_300,w_300/{public_id}.jpg"
 
-        # For images → thumbnail stays None
-
-        # Save meme document
+        # Create meme
         meme = Memes(
-            title=title,
+            title=title[:200],
             file=cloud_url,
             thumbnail=thumbnail_url,
-            type="video" if ext == "mp4" else "image",
+            type="video" if is_video else "image",
             tags=tags_list,
             user_name="Meme Verse",
-            language=language
+            language=language,
         )
         meme.save()
 
-        # Cleanup
-        try:
-            os.remove(local_path)
-        except Exception:
-            pass
-
-        cache.delete(lock_key)
+        os.remove(local_path)
         return meme
 
     except Exception as e:
