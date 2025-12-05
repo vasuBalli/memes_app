@@ -277,8 +277,11 @@ def download_instagram_video(payload, language="english"):
 
         if resource_type == "video":
             # Actual Cloudinary thumbnail
-            
-            thumbnail_url = f"https://res.cloudinary.com/dvrmhmvkw/video/upload/c_fill,h_300,w_300/{public_id}.jpg"
+            thumbnail_url = (
+                f"https://res.cloudinary.com/dvrmhmvkw/video/upload/"
+                f"c_fill,g_auto:face,h_720,w_720,q_auto:good/{public_id}.jpg"
+            )
+            # thumbnail_url = f"https://res.cloudinary.com/dvrmhmvkw/video/upload/c_fill,h_300,w_300/{public_id}.jpg"
 
         # For images → thumbnail stays None
 
