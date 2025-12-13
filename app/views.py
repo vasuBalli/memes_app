@@ -181,9 +181,9 @@ def feed(request):
     try:
         page = int(request.GET.get('page', 1))
         per_page = int(request.GET.get('per_page', 10))
-        device_id = request.GET.get('device_id', "")
-        if not device_id:
-            get_or_create_user_by_device(device_id)
+        # device_id = request.GET.get('device_id', "")
+        # if not device_id:
+        #     get_or_create_user_by_device(device_id)
         queryset = Memes.objects.order_by('-created_at')
         items, total_items, total_pages = paginate_mongo_queryset(queryset, page=page, per_page=per_page)
         data = memes_list_to_dict(items)
