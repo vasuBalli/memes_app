@@ -21,3 +21,22 @@ class Memes(Document):
     created_at = DateTimeField(default=datetime.datetime.utcnow)
     type = StringField(choices=('image', 'video'))
     language = StringField(choices=('telugu', 'english'))
+
+
+class UserInteraction(Document):
+    meta = {
+        "collection": "user_interactions",
+        "indexes": ["device_id"]
+    }
+
+    device_id = StringField(required=True, unique=True)
+    liked_memes = ListField(StringField(), default=list)
+    bookmarked_memes = ListField(StringField(), default=list)
+    viewed_memes = ListField(StringField(), default=list)
+
+    created_at = DateTimeField(default=datetime.datetime.utcnow)
+    updated_at = DateTimeField(default=datetime.datetime.utcnow)
+
+    def touch(self):
+        self.updated_at = datetime.datetime.utcnow()
+        self.save()

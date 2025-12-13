@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.cache import cache
 
-from .models import Memes
+from .models import Memes, UserInteraction
 from .serializers import meme_to_dict, memes_list_to_dict
 import magic
 import os
@@ -14,10 +14,18 @@ import requests
 import cloudinary.uploader
 import yt_dlp
 
+
 logger = logging.getLogger('app_logger')
 
 COOKIES_PATH = "/home/ubuntu/memes_app/instagram_cookies.txt"
 TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
+
+def get_or_create_user_by_device(device_id: str) -> UserInteraction:
+    user = UserInteraction.objects(device_id=device_id).first()
+    if not user:
+        user = UserInteraction(device_id=device_id)
+        user.save()
+    return user
 
 # ---------- Pagination helper ----------
 import math
@@ -80,14 +88,102 @@ def reels_feed(request):
     except Exception as e:
         logger.exception("Error in reels_feed API")
         return JsonResponse({"status": "error", "message": str(e)}, status=500)
+@csrf_exempt
+def toggle_like(request):
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+        meme_id = body.get("meme_id")
+        device_id = body.get("device_id")
 
+        if not meme_id or not device_id:
+            return JsonResponse(
+                {"status": "error", "message": "meme_id and device_id required"},
+                status=400
+            )
+
+        user = get_or_create_user_by_device(device_id)
+
+        if meme_id in user.liked_memes:
+            user.liked_memes.remove(meme_id)
+            liked = False
+        else:
+            user.liked_memes.append(meme_id)
+            liked = True
+
+        user.touch()
+
+        return JsonResponse({
+            "status": "success",
+            "liked": liked
+        })
+
+    except Exception as e:
+        logger.exception("toggle_like error")
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+@csrf_exempt
+def toggle_bookmark(request):
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+        meme_id = body.get("meme_id")
+        device_id = body.get("device_id")
+
+        if not meme_id or not device_id:
+            return JsonResponse(
+                {"status": "error", "message": "meme_id and device_id required"},
+                status=400
+            )
+
+        user = get_or_create_user_by_device(device_id)
+
+        if meme_id in user.bookmarked_memes:
+            user.bookmarked_memes.remove(meme_id)
+            bookmarked = False
+        else:
+            user.bookmarked_memes.append(meme_id)
+            bookmarked = True
+
+        user.touch()
+
+        return JsonResponse({
+            "status": "success",
+            "bookmarked": bookmarked
+        })
+
+    except Exception as e:
+        logger.exception("toggle_bookmark error")
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+@csrf_exempt
+def track_view(request):
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+        meme_id = body.get("meme_id")
+        device_id = body.get("device_id")
+
+        if not meme_id or not device_id:
+            return JsonResponse({"status": "error"}, status=400)
+
+        user = get_or_create_user_by_device(device_id)
+
+        if meme_id not in user.viewed_memes:
+            user.viewed_memes.append(meme_id)
+            user.touch()
+
+        return JsonResponse({"status": "success"})
+
+    except Exception:
+        return JsonResponse({"status": "error"}, status=500)
 
 def feed(request):
     logger.info("feed endpoint accessed")
     try:
         page = int(request.GET.get('page', 1))
         per_page = int(request.GET.get('per_page', 10))
-
+        device_id = request.GET.get('device_id', "")
+        if not device_id:
+            get_or_create_user_by_device(device_id)
         queryset = Memes.objects.order_by('-created_at')
         items, total_items, total_pages = paginate_mongo_queryset(queryset, page=page, per_page=per_page)
         data = memes_list_to_dict(items)
