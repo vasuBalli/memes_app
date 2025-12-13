@@ -1,5 +1,5 @@
 # app/models.py
-from mongoengine import Document, StringField, ListField, DateTimeField
+from mongoengine import Document, StringField, ListField, DateTimeField, IntField
 import datetime
 
 class Memes(Document):
@@ -21,6 +21,10 @@ class Memes(Document):
     created_at = DateTimeField(default=datetime.datetime.utcnow)
     type = StringField(choices=('image', 'video'))
     language = StringField(choices=('telugu', 'english'))
+    likes_count = IntField(default=0)
+    views_count = IntField(default=0)
+    bookmarks_count = IntField(default=0)
+    share_count = IntField(default=0)
 
 
 class UserInteraction(Document):

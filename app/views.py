@@ -102,19 +102,23 @@ def toggle_like(request):
             )
 
         user = get_or_create_user_by_device(device_id)
-
+        meme = Memes.objects.get(id=meme_id)
         if meme_id in user.liked_memes:
             user.liked_memes.remove(meme_id)
+            meme.likes_count = max(meme.likes_count - 1, 0)
             liked = False
         else:
             user.liked_memes.append(meme_id)
+            meme.likes_count += 1
             liked = True
 
         user.touch()
+        meme.save()
 
         return JsonResponse({
             "status": "success",
-            "liked": liked
+            "liked": liked,
+            "likes_count": meme.likes_count
         })
 
     except Exception as e:
@@ -136,19 +140,24 @@ def toggle_bookmark(request):
             )
 
         user = get_or_create_user_by_device(device_id)
+        meme = Memes.objects.get(id=meme_id)
 
         if meme_id in user.bookmarked_memes:
             user.bookmarked_memes.remove(meme_id)
+            meme.bookmarks_count = max(meme.bookmarks_count - 1, 0)
             bookmarked = False
         else:
             user.bookmarked_memes.append(meme_id)
+            meme.bookmarks_count += 1
             bookmarked = True
 
         user.touch()
+        meme.save()
 
         return JsonResponse({
             "status": "success",
-            "bookmarked": bookmarked
+            "bookmarked": bookmarked,
+            "bookmarks_count": meme.bookmarks_count
         })
 
     except Exception as e:
@@ -166,10 +175,13 @@ def track_view(request):
             return JsonResponse({"status": "error"}, status=400)
 
         user = get_or_create_user_by_device(device_id)
-
+        meme = Memes.objects.get(id=meme_id)
         if meme_id not in user.viewed_memes:
             user.viewed_memes.append(meme_id)
+            meme.views_count += 1
             user.touch()
+            meme.save()
+
 
         return JsonResponse({"status": "success"})
 
