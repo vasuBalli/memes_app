@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.cache import cache
-
+from mongoengine.errors import DoesNotExist, ValidationError
 from .models import Memes, UserInteraction
 from .serializers import meme_to_dict, memes_list_to_dict
 import magic
@@ -175,6 +175,64 @@ def track_view(request):
 
     except Exception:
         return JsonResponse({"status": "error"}, status=500)
+    
+def post_details(request):
+    """
+    Get a single post/meme by ID
+    Optional: device_id to return like/bookmark status
+    """
+    try:
+        post_id = request.GET.get("post_id")
+        device_id = request.GET.get("device_id")  # optional
+
+        if not post_id:
+            return JsonResponse(
+                {"status": "error", "message": "post_id is required"},
+                status=400
+            )
+
+        # Fetch post
+        meme = Memes.objects.get(id=post_id)
+
+        # Convert to dict using your existing serializer
+        data = meme_to_dict(meme)
+
+        # Ensure https
+        if data.get("file_url"):
+            data["file_url"] = data["file_url"].replace("http://", "https://")
+
+        # Defaults
+        data["is_liked"] = False
+        data["is_bookmarked"] = False
+
+        # If device_id is provided, check user interactions
+        if device_id:
+            user = UserInteraction.objects(device_id=device_id).first()
+            if user:
+                data["is_liked"] = post_id in user.liked_memes
+                data["is_bookmarked"] = post_id in user.bookmarked_memes
+
+        return JsonResponse({
+            "status": "success",
+            "data": data
+        })
+
+    except DoesNotExist:
+        return JsonResponse(
+            {"status": "error", "message": "Post not found"},
+            status=404
+        )
+    except ValidationError:
+        return JsonResponse(
+            {"status": "error", "message": "Invalid post_id"},
+            status=400
+        )
+    except Exception as e:
+        logger.exception("Error in post_details API")
+        return JsonResponse(
+            {"status": "error", "message": str(e)},
+            status=500
+        )
 
 def feed(request):
     logger.info("feed endpoint accessed")

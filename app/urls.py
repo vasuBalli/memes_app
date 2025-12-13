@@ -12,4 +12,5 @@ urlpatterns = [
     path("like/", toggle_like),
     path("bookmark/", toggle_bookmark),
     path("view/", track_view),
+    path("post-details/", post_details),
  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
