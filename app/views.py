@@ -21,6 +21,7 @@ COOKIES_PATH = "/home/ubuntu/memes_app/instagram_cookies.txt"
 TEMP_DIR = os.path.join(settings.BASE_DIR, "memeverse")
 
 def get_or_create_user_by_device(device_id: str) -> UserInteraction:
+    logger.info(f"create user function triggered")
     user = UserInteraction.objects(device_id=device_id).first()
     if not user:
         user = UserInteraction(device_id=device_id)
@@ -267,9 +268,10 @@ def feed(request):
     try:
         page = int(request.GET.get('page', 1))
         per_page = int(request.GET.get('per_page', 10))
-        # device_id = request.GET.get('device_id', "")
-        # if not device_id:
-        #     get_or_create_user_by_device(device_id)
+        device_id = request.GET.get('device_id', "")
+        if device_id:
+            get_or_create_user_by_device(device_id)
+        body = json.loads(request.body.decode("utf-8"))
         queryset = Memes.objects.order_by('-created_at')
         items, total_items, total_pages = paginate_mongo_queryset(queryset, page=page, per_page=per_page)
         data = memes_list_to_dict(items)
