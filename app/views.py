@@ -107,9 +107,10 @@ def toggle_like(request):
                 status=400
             )
         body = json.loads(request.body.decode("utf-8"))
+        logger.info(f"parsed body: {body}")
         meme_id = body.get("meme_id")
         device_id = body.get("device_id")
-
+        logger.info(f"meme_id: {meme_id}, device_id: {device_id}")
         if not meme_id or not device_id:
             return JsonResponse(
                 {"status": "error", "message": "meme_id and device_id required"},
