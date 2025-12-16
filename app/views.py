@@ -271,7 +271,7 @@ def feed(request):
         device_id = request.GET.get('device_id', "")
         if device_id:
             get_or_create_user_by_device(device_id)
-        body = json.loads(request.body.decode("utf-8"))
+        # body = json.loads(request.body.decode("utf-8"))
         queryset = Memes.objects.order_by('-created_at')
         items, total_items, total_pages = paginate_mongo_queryset(queryset, page=page, per_page=per_page)
         data = memes_list_to_dict(items)
