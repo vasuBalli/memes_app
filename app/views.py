@@ -91,6 +91,18 @@ def reels_feed(request):
 @csrf_exempt
 def toggle_like(request):
     try:
+          # ✅ SAFE JSON PARSE (NO CRASH)
+        if request.method != "POST":
+            return JsonResponse(
+                {"status": "error", "message": "POST method required"},
+                status=405
+            )
+
+        if not request.body:
+            return JsonResponse(
+                {"status": "error", "message": "Empty request body"},
+                status=400
+            )
         body = json.loads(request.body.decode("utf-8"))
         meme_id = body.get("meme_id")
         device_id = body.get("device_id")
