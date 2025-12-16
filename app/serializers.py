@@ -16,6 +16,9 @@ def meme_to_dict(meme):
         "created_at": meme.created_at.isoformat() if isinstance(meme.created_at, datetime.datetime) else meme.created_at,
         "type": meme.type,
         "language": meme.language,
+        "likes_count": meme.likes_count or 0,
+        "views_count": meme.views_count or 0,
+        "bookmarks_count": meme.bookmarks_count or 0,
     }
     return data
 
