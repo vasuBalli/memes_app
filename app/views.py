@@ -92,6 +92,9 @@ def reels_feed(request):
 def toggle_like(request):
     try:
           # ✅ SAFE JSON PARSE (NO CRASH)
+       
+        logger.info(f"method: {request.method}")
+        logger.info(f"body: {request.body}")
         if request.method != "POST":
             return JsonResponse(
                 {"status": "error", "message": "POST method required"},
