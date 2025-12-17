@@ -1,5 +1,5 @@
 # app/models.py
-from mongoengine import Document, StringField, ListField, DateTimeField, IntField
+from mongoengine import Document, StringField, ListField, DateTimeField, IntField, DateField
 import datetime
 
 class Memes(Document):
@@ -26,6 +26,15 @@ class Memes(Document):
     bookmarks_count = IntField(default=0)
     share_count = IntField(default=0)
 
+class NginxDailyTraffic(Document):
+    meta = {
+        "collection": "nginx_daily_traffic",
+        "indexes": ["date"]
+    }
+
+    date = DateField(required=True, unique=True)
+    total_requests = IntField(default=0)
+    unique_visitors = IntField(default=0)
 
 class UserInteraction(Document):
     meta = {

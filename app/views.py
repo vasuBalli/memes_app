@@ -135,7 +135,7 @@ def toggle_like(request):
         return JsonResponse({
             "status": "success",
             "liked": liked,
-            "likes_count": meme.likes_count
+            "likes_count": Memes.objects.get(id=meme_id).likes_count
         })
 
     except Exception as e:
