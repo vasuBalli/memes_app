@@ -33,8 +33,18 @@ class NginxDailyTraffic(Document):
     }
 
     date = DateField(required=True, unique=True)
+
+    # totals
     total_requests = IntField(default=0)
-    unique_visitors = IntField(default=0)
+
+    # human vs bot
+    human_requests = IntField(default=0)
+    bot_requests = IntField(default=0)
+
+    human_unique_visitors = IntField(default=0)
+    bot_unique_visitors = IntField(default=0)
+
+ 
 
 class UserInteraction(Document):
     meta = {
