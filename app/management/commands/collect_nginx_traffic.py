@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 from app.models import NginxDailyTraffic
 
 LOG_FILE = "/var/log/nginx/access.log"
+DOMAIN = "memeverse.in"
 
 BOT_PATTERN = re.compile(
     r"(bot|crawl|spider|slurp|facebook|whatsapp|telegram|discord|preview|"
@@ -13,12 +14,13 @@ BOT_PATTERN = re.compile(
 )
 
 class Command(BaseCommand):
-    help = "Collect daily nginx traffic (human vs bot)"
+    help = "Collect daily nginx traffic for memeverse domain only"
 
     def handle(self, *args, **kwargs):
         today = datetime.date.today()
         date_str = today.strftime("%d/%b/%Y")
 
+        # get only today's logs
         cmd = f"grep '{date_str}' {LOG_FILE}"
         lines = subprocess.getoutput(cmd).splitlines()
 
@@ -28,8 +30,13 @@ class Command(BaseCommand):
         bot_requests = 0
 
         for line in lines:
+            # ✅ DOMAIN FILTER (MOST IMPORTANT PART)
+            if DOMAIN not in line:
+                continue
+
             ip = line.split()[0]
 
+            # 🤖 BOT CHECK
             if BOT_PATTERN.search(line):
                 bot_requests += 1
                 bot_ips.add(ip)
@@ -41,7 +48,7 @@ class Command(BaseCommand):
         if not traffic:
             traffic = NginxDailyTraffic(date=today)
 
-        traffic.total_requests = len(lines)
+        traffic.total_requests = human_requests + bot_requests
         traffic.human_requests = human_requests
         traffic.bot_requests = bot_requests
         traffic.human_unique_visitors = len(human_ips)
@@ -53,23 +60,4 @@ class Command(BaseCommand):
             f"{today} | "
             f"Human: {human_requests} ({len(human_ips)} uniques) | "
             f"Bot: {bot_requests} ({len(bot_ips)} uniques)"
-        )
-
-        self.check_spike(today, human_requests)
-
-    def check_spike(self, today, today_requests):
-        yesterday = today - datetime.timedelta(days=1)
-        yesterday_data = NginxDailyTraffic.objects(date=yesterday).first()
-
-        if not yesterday_data:
-            return
-
-        if today_requests > yesterday_data.human_requests * 2:
-            self.send_alert(today_requests, yesterday_data.human_requests)
-
-    def send_alert(self, today, yesterday):
-        print(
-            "🚨 TRAFFIC SPIKE ALERT 🚨\n"
-            f"Yesterday: {yesterday}\n"
-            f"Today: {today}"
         )
