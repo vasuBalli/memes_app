@@ -31,7 +31,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://memeverse.in',
     'https://memeverse.in',
     'http://35.154.11.54',
-    'https://35.154.11.54
+    'https://35.154.11.54'
 ]
 
 
