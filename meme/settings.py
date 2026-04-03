@@ -19,7 +19,7 @@ SECRET_KEY = 'django-insecure-wzw1)hqt05qqi*03dz$yo1wwtho7*=neh+pemsy$jc-e0l&i!f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1","memeverse.in","www.memeverse.in"]
+ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1","memeverse.in","www.memeverse.in","35.154.11.54"]
 
 # CSRF_TRUSTED_ORIGINS = ['43.205.128.213', '127.0.0.1:5500']
 
@@ -30,6 +30,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://43.205.128.213',
     'http://memeverse.in',
     'https://memeverse.in',
+    '35.154.11.54'
 ]
 
 
