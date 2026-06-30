@@ -1,65 +1,116 @@
 # app/models.py
-from mongoengine import Document, StringField, ListField, DateTimeField, IntField, DateField
-import datetime
 
-class Memes(Document):
-    meta = {
-        'collection': 'memes',
-        'indexes': [
-            '-created_at',
-            'tags',
-            'type',
+from django.db import models
+
+class Memes(models.Model):
+
+    TYPE_CHOICES = (
+        ('image', 'Image'),
+        ('video', 'Video'),
+    )
+
+    LANGUAGE_CHOICES = (
+        ('telugu', 'Telugu'),
+        ('english', 'English'),
+    )
+
+    title = models.CharField(max_length=5000)
+
+    # Cloudinary URL
+    file = models.URLField(max_length=1000)
+
+    tags = models.JSONField(default=list, blank=True)
+
+    user_name = models.CharField(max_length=1000, blank=True)
+
+    thumbnail = models.URLField(
+        max_length=1000,
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES
+    )
+
+    language = models.CharField(
+        max_length=20,
+        choices=LANGUAGE_CHOICES
+    )
+
+    likes_count = models.IntegerField(default=0)
+    views_count = models.IntegerField(default=0)
+    bookmarks_count = models.IntegerField(default=0)
+    share_count = models.IntegerField(default=0)
+
+class Meta:
+    ordering = ['-created_at']
+    indexes = [
+        models.Index(fields=['created_at']),
+        models.Index(fields=['type']),
+    ]
+
+    def __str__(self):
+        return self.title
+
+
+class NginxDailyTraffic(models.Model):
+
+
+    date = models.DateField(unique=True)
+
+    total_requests = models.IntegerField(default=0)
+
+    human_requests = models.IntegerField(default=0)
+    bot_requests = models.IntegerField(default=0)
+
+    human_unique_visitors = models.IntegerField(default=0)
+    bot_unique_visitors = models.IntegerField(default=0)
+
+class Meta:
+    ordering = ['-date']
+
+    def __str__(self):
+        return str(self.date)
+
+
+class UserInteraction(models.Model):
+
+
+    device_id = models.CharField(
+        max_length=255,
+        unique=True
+    )
+
+    liked_memes = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    bookmarked_memes = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    viewed_memes = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['device_id'])
         ]
-    }
-
-    title = StringField(max_length=5000)
-    # store cloudinary secure URLs as strings
-    file = StringField()
-    tags = ListField(StringField(), default=list)
-    user_name = StringField(max_length=1000)
-    thumbnail = StringField()
-    created_at = DateTimeField(default=datetime.datetime.utcnow)
-    type = StringField(choices=('image', 'video'))
-    language = StringField(choices=('telugu', 'english'))
-    likes_count = IntField(default=0)
-    views_count = IntField(default=0)
-    bookmarks_count = IntField(default=0)
-    share_count = IntField(default=0)
-
-class NginxDailyTraffic(Document):
-    meta = {
-        "collection": "nginx_daily_traffic",
-        "indexes": ["date"]
-    }
-
-    date = DateField(required=True, unique=True)
-
-    # totals
-    total_requests = IntField(default=0)
-
-    # human vs bot
-    human_requests = IntField(default=0)
-    bot_requests = IntField(default=0)
-
-    human_unique_visitors = IntField(default=0)
-    bot_unique_visitors = IntField(default=0)
-
- 
-
-class UserInteraction(Document):
-    meta = {
-        "collection": "user_interactions",
-        "indexes": ["device_id"]
-    }
-
-    device_id = StringField(required=True, unique=True)
-    liked_memes = ListField(StringField(), default=list)
-    bookmarked_memes = ListField(StringField(), default=list)
-    viewed_memes = ListField(StringField(), default=list)
-
-    created_at = DateTimeField(default=datetime.datetime.utcnow)
-    updated_at = DateTimeField(default=datetime.datetime.utcnow)
 
     def touch(self):
-        self.updated_at = datetime.datetime.utcnow()
         self.save()
+
+    def __str__(self):
+        return self.device_id

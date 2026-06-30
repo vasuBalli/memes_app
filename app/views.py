@@ -43,23 +43,50 @@ def paginate_mongo_queryset(queryset, page=1, per_page=10):
 
 def get_memes(request):
     logger.info("get_memes endpoint accessed")
-    try:
-        meme_type = request.GET.get('meme_type', None)
-        if meme_type:
-            queryset = Memes.objects(type=meme_type).order_by('-created_at')
-        else:
-            queryset = Memes.objects.order_by('-created_at')
 
-        # return all (careful on production); better to paginate in feed endpoint
+    try:
+        meme_type = request.GET.get('meme_type')
+
+        if meme_type:
+            queryset = Memes.objects.filter(
+                type=meme_type
+            ).order_by('-created_at')
+        else:
+            queryset = Memes.objects.all().order_by('-created_at')
+
         data = memes_list_to_dict(queryset)
-        for i in data:
-            if i.get("file_url"):
-                i["file_url"] = i["file_url"].replace("http://", "https://")
-        return JsonResponse({"status": "success", "data": data})
+
+        # Ensure HTTPS URLs
+        for item in data:
+            if item.get("file_url"):
+                item["file_url"] = item["file_url"].replace(
+                    "http://",
+                    "https://"
+                )
+
+            if item.get("thumbnail_url"):
+                item["thumbnail_url"] = item["thumbnail_url"].replace(
+                    "http://",
+                    "https://"
+                )
+
+        logger.info(f"Fetched {len(data)} memes")
+
+        return JsonResponse({
+            "status": "success",
+            "data": data
+        })
+
     except Exception as e:
         logger.exception("Error fetching memes")
-        return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
+        return JsonResponse(
+            {
+                "status": "error",
+                "message": str(e)
+            },
+            status=500
+        )
 
 def reels_feed(request):
     logger.info("reels_feed endpoint accessed")

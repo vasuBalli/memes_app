@@ -588,3 +588,23 @@ AttributeError: 'NoneType' object has no attribute 'video'
 [2025-11-09 11:00:30,560] INFO django.utils.autoreload: Watching for file changes with StatReloader
 [2025-11-09 11:01:45,916] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
 [2025-11-09 11:01:48,182] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-04-04 00:15:37,137] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-06-30 22:23:13,416] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-06-30 22:23:26,073] WARNING django.server: "GET / HTTP/1.1" 404 179
+[2026-06-30 22:23:45,562] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-06-30 22:23:48,015] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-06-30 22:23:49,900] WARNING django.server: "GET / HTTP/1.1" 404 2302
+[2026-06-30 22:23:58,027] WARNING django.server: "GET /api/download/ HTTP/1.1" 404 4725
+[2026-06-30 22:24:04,353] WARNING django.server: "GET /api/download/memes HTTP/1.1" 404 4740
+[2026-06-30 22:24:34,457] INFO django.server: "GET /api/memes HTTP/1.1" 301 0
+[2026-06-30 22:24:34,476] INFO app_logger: get_memes endpoint accessed
+[2026-06-30 22:24:34,546] INFO app_logger: Fetched 0 memes
+[2026-06-30 22:24:34,550] INFO django.server: "GET /api/memes/ HTTP/1.1" 200 33
+[2026-06-30 22:26:06,998] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-06-30 22:26:12,906] INFO app_logger: get_memes endpoint accessed
+[2026-06-30 22:26:12,917] INFO app_logger: Fetched 3 memes
+[2026-06-30 22:26:12,920] INFO django.server: "GET /api/memes/ HTTP/1.1" 200 1191
+[2026-07-01 01:11:35,706] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-01 01:11:46,306] INFO app_logger: get_memes endpoint accessed
+[2026-07-01 01:11:47,496] INFO app_logger: Fetched 285 memes
+[2026-07-01 01:11:47,510] INFO django.server: "GET /api/memes/ HTTP/1.1" 200 131419

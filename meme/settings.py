@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wzw1)hqt05qqi*03dz$yo1wwtho7*=neh+pemsy$jc-e0l&i!f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["43.205.128.213","127.0.0.1","memeverse.in","www.memeverse.in"]
 
@@ -90,11 +90,17 @@ WSGI_APPLICATION = 'meme.wsgi.application'
 #     }
 # }
 
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "meme_db")
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://randyvasu0_db_user:UOt889NHDHgy5F7Z@cluster0.p9ugx4s.mongodb.net/")
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'memeverse',
+        'USER': 'memeverse',
+        'PASSWORD': 'Memeverse@1919',
+        'HOST': '13.232.245.198',
+        'PORT': '5432',
+    }
+}
 
-# If using SRV connection string:
-connect(host=MONGO_URI, alias="default")
 
 
 # Password validation
