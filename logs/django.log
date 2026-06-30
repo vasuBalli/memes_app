@@ -608,3 +608,7 @@ AttributeError: 'NoneType' object has no attribute 'video'
 [2026-07-01 01:11:46,306] INFO app_logger: get_memes endpoint accessed
 [2026-07-01 01:11:47,496] INFO app_logger: Fetched 285 memes
 [2026-07-01 01:11:47,510] INFO django.server: "GET /api/memes/ HTTP/1.1" 200 131419
+[2026-07-01 02:30:39,463] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-01 02:30:42,931] INFO app_logger: get_memes endpoint accessed
+[2026-07-01 02:30:43,476] INFO app_logger: Fetched 20 memes (page 1)
+[2026-07-01 02:30:43,480] INFO django.server: "GET /api/memes/ HTTP/1.1" 200 9465

@@ -13,6 +13,11 @@ import logging
 import requests
 import cloudinary.uploader
 import yt_dlp
+from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 logger = logging.getLogger('app_logger')
@@ -30,22 +35,22 @@ def get_or_create_user_by_device(device_id: str) -> UserInteraction:
 
 # ---------- Pagination helper ----------
 import math
-def paginate_mongo_queryset(queryset, page=1, per_page=10):
-    if page < 1:
-        page = 1
-    total_items = queryset.count()
-    total_pages = math.ceil(total_items / per_page) if total_items else 0
-    skip = (page - 1) * per_page
-    items = queryset.skip(skip).limit(per_page)
-    return items, total_items, total_pages
+
 
 # ---------- Endpoints ----------
+
+
+
 
 def get_memes(request):
     logger.info("get_memes endpoint accessed")
 
     try:
         meme_type = request.GET.get('meme_type')
+
+        # Pagination params
+        page = int(request.GET.get('page', 1))
+        limit = int(request.GET.get('limit', 20))
 
         if meme_type:
             queryset = Memes.objects.filter(
@@ -54,7 +59,25 @@ def get_memes(request):
         else:
             queryset = Memes.objects.all().order_by('-created_at')
 
-        data = memes_list_to_dict(queryset)
+        # Pagination
+        paginator = Paginator(queryset, limit)
+
+        try:
+            memes_page = paginator.page(page)
+        except EmptyPage:
+            return JsonResponse({
+                "status": "success",
+                "data": [],
+                "pagination": {
+                    "current_page": page,
+                    "total_pages": paginator.num_pages,
+                    "total_items": paginator.count,
+                    "has_next": False,
+                    "has_previous": False
+                }
+            })
+
+        data = memes_list_to_dict(memes_page.object_list)
 
         # Ensure HTTPS URLs
         for item in data:
@@ -70,11 +93,22 @@ def get_memes(request):
                     "https://"
                 )
 
-        logger.info(f"Fetched {len(data)} memes")
+        logger.info(
+            f"Fetched {len(data)} memes (page {page})"
+        )
 
         return JsonResponse({
             "status": "success",
-            "data": data
+            "data": data,
+            "pagination": {
+                "current_page": page,
+                "total_pages": paginator.num_pages,
+                "total_items": paginator.count,
+                "has_next": memes_page.has_next(),
+                "has_previous": memes_page.has_previous(),
+                "next_page": page + 1 if memes_page.has_next() else None,
+                "previous_page": page - 1 if memes_page.has_previous() else None
+            }
         })
 
     except Exception as e:
