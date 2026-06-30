@@ -5,7 +5,7 @@ import cloudinary.api
 
 
 class Command(BaseCommand):
-
+#pl
     def import_resources(self, resource_type):
         next_cursor = None
         created = 0
