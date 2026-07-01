@@ -2,6 +2,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.db import connection
 from django.core.cache import cache
 from mongoengine.errors import DoesNotExist, ValidationError
 from .models import Memes, UserInteraction
@@ -46,41 +47,64 @@ def get_memes(request):
     logger.info("get_memes endpoint accessed")
 
     try:
-        meme_type = request.GET.get('meme_type')
+        meme_type = request.GET.get("meme_type")
+        cursor_id = request.GET.get("cursor")
+        limit = min(int(request.GET.get("limit", 20)), 50)
 
-        # Pagination params
-        page = int(request.GET.get('page', 1))
-        limit = int(request.GET.get('limit', 20))
+        sql = """
+            SELECT
+                id,
+                title,
+                file_url,
+                thumbnail_url,
+                type,
+                language,
+                likes_count,
+                views_count,
+                bookmarks_count,
+                shares_count,
+                created_at
+            FROM memes
+            WHERE 1=1
+        """
 
+        params = []
+
+        # Filter by type
         if meme_type:
-            queryset = Memes.objects.filter(
-                type=meme_type
-            ).order_by('-created_at')
-        else:
-            queryset = Memes.objects.all().order_by('-created_at')
+            sql += " AND type = %s"
+            params.append(meme_type)
 
-        # Pagination
-        paginator = Paginator(queryset, limit)
+        # Cursor pagination
+        if cursor_id:
+            sql += " AND id < %s"
+            params.append(cursor_id)
 
-        try:
-            memes_page = paginator.page(page)
-        except EmptyPage:
-            return JsonResponse({
-                "status": "success",
-                "data": [],
-                "pagination": {
-                    "current_page": page,
-                    "total_pages": paginator.num_pages,
-                    "total_items": paginator.count,
-                    "has_next": False,
-                    "has_previous": False
-                }
-            })
+        # Order and limit
+        sql += """
+            ORDER BY id DESC
+            LIMIT %s
+        """
 
-        data = memes_list_to_dict(memes_page.object_list)
+        params.append(limit + 1)  # fetch one extra row
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql, params)
+
+            columns = [col[0] for col in cursor.description]
+            rows = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+
+        has_next = len(rows) > limit
+
+        if has_next:
+            rows = rows[:limit]
 
         # Ensure HTTPS URLs
-        for item in data:
+        for item in rows:
+
             if item.get("file_url"):
                 item["file_url"] = item["file_url"].replace(
                     "http://",
@@ -93,34 +117,35 @@ def get_memes(request):
                     "https://"
                 )
 
-        logger.info(
-            f"Fetched {len(data)} memes (page {page})"
+            # Convert datetime to string
+            if item.get("created_at"):
+                item["created_at"] = (
+                    item["created_at"].isoformat()
+                )
+
+        next_cursor = (
+            rows[-1]["id"]
+            if has_next and rows
+            else None
         )
 
         return JsonResponse({
             "status": "success",
-            "data": data,
+            "data": rows,
             "pagination": {
-                "current_page": page,
-                "total_pages": paginator.num_pages,
-                "total_items": paginator.count,
-                "has_next": memes_page.has_next(),
-                "has_previous": memes_page.has_previous(),
-                "next_page": page + 1 if memes_page.has_next() else None,
-                "previous_page": page - 1 if memes_page.has_previous() else None
+                "has_next": has_next,
+                "next_cursor": next_cursor,
+                "limit": limit
             }
         })
 
     except Exception as e:
         logger.exception("Error fetching memes")
 
-        return JsonResponse(
-            {
-                "status": "error",
-                "message": str(e)
-            },
-            status=500
-        )
+        return JsonResponse({
+            "status": "error",
+            "message": str(e)
+        }, status=500)
 
 def reels_feed(request):
     logger.info("reels_feed endpoint accessed")
@@ -461,20 +486,30 @@ def webhook(request):
             return JsonResponse({'error': str(e)}, status=400)
     else:
         return HttpResponse(status=405)
-
-
+from django.db import connection
+import json
 
 def download_instagram_video(payload, language="english"):
     logger.info("download_instagram_video called")
+
     try:
         entry = payload.get("entry", [])[0]
         messaging = entry.get("messaging", [])[0]
         attachment = messaging.get("message", {}).get("attachments", [])[0]
 
-        media_url = clean_webhook_url(attachment.get("payload", {}).get("url") or "")
-        title = attachment.get("payload", {}).get("title", "Instagram Media")
+        media_url = clean_webhook_url(
+            attachment.get("payload", {}).get("url") or ""
+        )
 
-        tags_list = [w.lstrip("#") for w in title.split() if w.startswith("#")]
+        title = attachment.get(
+            "payload", {}
+        ).get("title", "Instagram Media")
+
+        tags_list = [
+            w.lstrip("#")
+            for w in title.split()
+            if w.startswith("#")
+        ]
 
         reel_id = (
             attachment.get("payload", {}).get("reel_video_id")
@@ -482,19 +517,28 @@ def download_instagram_video(payload, language="english"):
             or "unknown_id"
         )
 
-        local_path = os.path.join(TEMP_DIR, f"{reel_id}")
+        local_path = os.path.join(
+            TEMP_DIR,
+            f"{reel_id}"
+        )
+
         os.makedirs(TEMP_DIR, exist_ok=True)
 
-        # Download the media
+        # Download media
         r = requests.get(media_url, timeout=30)
+
         with open(local_path, "wb") as f:
             f.write(r.content)
 
-        # Detect REAL file type
-        mime = magic.from_file(local_path, mime=True)
+        # Detect file type
+        mime = magic.from_file(
+            local_path,
+            mime=True
+        )
+
         is_video = "video" in mime
 
-        # Upload to Cloudinary with correct resource type
+        # Upload to Cloudinary
         upload = cloudinary.uploader.upload(
             local_path,
             resource_type="video" if is_video else "image",
@@ -503,34 +547,143 @@ def download_instagram_video(payload, language="english"):
 
         cloud_url = upload["secure_url"]
 
-        # Generate HD thumbnail ONLY for video
         thumbnail_url = None
+
         if is_video:
-            # cloud_name = settings.CLOUDINARY_STORAGE["CLOUD_NAME"]
             public_id = upload["public_id"]
+
             thumbnail_url = (
-                f"https://res.cloudinary.com/dvrmhmvkw/video/upload/"
-                f"c_fill,g_auto:face,h_720,w_720,q_auto:good/{public_id}.jpg"
+                f"https://res.cloudinary.com/"
+                f"dvrmhmvkw/video/upload/"
+                f"c_fill,g_auto:face,h_720,w_720,"
+                f"q_auto:good/{public_id}.jpg"
             )
 
-        # Create meme
-        meme = Memes(
-            title=title[:200],
-            file=cloud_url,
-            thumbnail=thumbnail_url,
-            type="video" if is_video else "image",
-            tags=tags_list,
-            user_name="Meme Verse",
-            language=language,
-        )
-        meme.save()
+        # RAW SQL INSERT
+        with connection.cursor() as cursor:
 
-        os.remove(local_path)
-        return meme
+            cursor.execute(
+                """
+                INSERT INTO memes (
+                    title,
+                    file_url,
+                    thumbnail_url,
+                    type,
+                    language,
+                    likes_count,
+                    views_count,
+                    bookmarks_count,
+                    shares_count,
+                    comments_count,
+                    created_at
+                )
+                VALUES (
+                    %s, %s, %s, %s, %s,
+                    0, 0, 0, 0, 0, NOW()
+                )
+                RETURNING id
+                """,
+                [
+                    title[:5000],
+                    cloud_url,
+                    thumbnail_url,
+                    "video" if is_video else "image",
+                    language
+                ]
+            )
+
+            meme_id = cursor.fetchone()[0]
+
+        logger.info(
+            f"Meme created successfully. ID={meme_id}"
+        )
+
+        if os.path.exists(local_path):
+            os.remove(local_path)
+
+        return {
+            "id": meme_id,
+            "title": title,
+            "file_url": cloud_url,
+            "thumbnail_url": thumbnail_url,
+            "type": "video" if is_video else "image"
+        }
 
     except Exception as e:
-        logger.exception("Error in download_instagram_video")
+        logger.exception(
+            "Error in download_instagram_video"
+        )
+
         return None
+
+
+# def download_instagram_video(payload, language="english"):
+#     logger.info("download_instagram_video called")
+#     try:
+#         entry = payload.get("entry", [])[0]
+#         messaging = entry.get("messaging", [])[0]
+#         attachment = messaging.get("message", {}).get("attachments", [])[0]
+
+#         media_url = clean_webhook_url(attachment.get("payload", {}).get("url") or "")
+#         title = attachment.get("payload", {}).get("title", "Instagram Media")
+
+#         tags_list = [w.lstrip("#") for w in title.split() if w.startswith("#")]
+
+#         reel_id = (
+#             attachment.get("payload", {}).get("reel_video_id")
+#             or attachment.get("payload", {}).get("id")
+#             or "unknown_id"
+#         )
+
+#         local_path = os.path.join(TEMP_DIR, f"{reel_id}")
+#         os.makedirs(TEMP_DIR, exist_ok=True)
+
+#         # Download the media
+#         r = requests.get(media_url, timeout=30)
+#         with open(local_path, "wb") as f:
+#             f.write(r.content)
+
+#         # Detect REAL file type
+#         mime = magic.from_file(local_path, mime=True)
+#         is_video = "video" in mime
+
+#         # Upload to Cloudinary with correct resource type
+#         upload = cloudinary.uploader.upload(
+#             local_path,
+#             resource_type="video" if is_video else "image",
+#             folder="instagram_memes"
+#         )
+
+#         cloud_url = upload["secure_url"]
+
+#         # Generate HD thumbnail ONLY for video
+#         thumbnail_url = None
+#         if is_video:
+#             # cloud_name = settings.CLOUDINARY_STORAGE["CLOUD_NAME"]
+#             public_id = upload["public_id"]
+#             thumbnail_url = (
+#                 f"https://res.cloudinary.com/dvrmhmvkw/video/upload/"
+#                 f"c_fill,g_auto:face,h_720,w_720,q_auto:good/{public_id}.jpg"
+#             )
+
+#         # Create meme
+#         meme = Memes(
+#             title=title[:200],
+#             file=cloud_url,
+#             thumbnail=thumbnail_url,
+#             type="video" if is_video else "image",
+#             tags=tags_list,
+#             user_name="Meme Verse",
+#             language=language,
+#         )
+#         meme.save()
+
+#         os.remove(local_path)
+#         return meme
+
+#     except Exception as e:
+#         logger.exception("Error in download_instagram_video")
+#         return None
 
 
 

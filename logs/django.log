@@ -612,3 +612,12 @@ AttributeError: 'NoneType' object has no attribute 'video'
 [2026-07-01 02:30:42,931] INFO app_logger: get_memes endpoint accessed
 [2026-07-01 02:30:43,476] INFO app_logger: Fetched 20 memes (page 1)
 [2026-07-01 02:30:43,480] INFO django.server: "GET /api/memes/ HTTP/1.1" 200 9465
+[2026-07-02 00:39:52,429] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-02 00:40:08,381] WARNING django.server: "GET / HTTP/1.1" 404 2302
+[2026-07-02 00:40:08,796] WARNING django.server: "GET /favicon.ico HTTP/1.1" 404 2353
+[2026-07-02 00:40:14,215] INFO app_logger: get_memes endpoint accessed
+[2026-07-02 00:40:15,831] INFO django.server: "GET /api/memes/ HTTP/1.1" 200 6598
+[2026-07-02 00:43:00,590] INFO app_logger: get_memes endpoint accessed
+[2026-07-02 00:43:01,507] INFO django.server: "GET /api/memes/?cursor=267 HTTP/1.1" 200 6598
+[2026-07-02 00:47:18,663] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-02 00:47:25,244] INFO django.utils.autoreload: Watching for file changes with StatReloader
