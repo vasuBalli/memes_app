@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from django.db import connection
+from django.db import connection,transaction
 from django.core.cache import cache
 from mongoengine.errors import DoesNotExist, ValidationError
 from .models import Memes, UserInteraction
@@ -433,6 +433,41 @@ def download_and_upload_instagram_video(url, language="english"):
             language=language
         )
         meme.save()
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO memes (
+                        title,
+                        file_url,
+                        thumbnail_url,
+                        type,
+                        language,
+                        likes_count,
+                        views_count,
+                        bookmarks_count,
+                        shares_count,
+                        comments_count,
+                        created_at
+                    )
+                    VALUES (
+                        %s, %s, %s, %s, %s,
+                        0, 0, 0, 0, 0, NOW()
+                    )
+                    RETURNING id
+                    """,
+                    [
+                        title[:5000],
+                        file_secure_url,
+                        thumbnail_url,
+                        "video",
+                        language
+                    ]
+                )
+
+                meme_id = cursor.fetchone()[0]
+
+        logger.info(f"Meme created successfully. ID={meme_id}")
 
         # cleanup
         try:
