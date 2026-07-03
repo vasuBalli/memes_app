@@ -382,57 +382,78 @@ def feed(request):
 
 # ---------- Instagram download + upload helpers (adapted) ----------
 
-def download_and_upload_instagram_video(url, language="english"):
-    logger.info(f"Downloading Instagram video from URL: {url}")
+def download_and_upload_instagram_media(url, language="english"):
+    logger.info(f"Downloading Instagram media from URL: {url}")
+
     try:
         temp_dir = TEMP_DIR
         os.makedirs(temp_dir, exist_ok=True)
+
         ydl_opts = {
-    'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
-    'cookiefile': COOKIES_PATH,
-    'format': 'best',
-    'merge_output_format': 'mp4',
-    'quiet': True,
-    'noplaylist': True,
-    'no_cookies_update': True,
-    'retries': 3,
-}
+            'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+            'cookiefile': COOKIES_PATH,
+            'format': 'best',
+            'merge_output_format': 'mp4',
+            'quiet': True,
+            'noplaylist': True,
+            'no_cookies_update': True,
+            'retries': 3,
+        }
+
         logger.info(f"Cookie file: {COOKIES_PATH}")
         logger.info(f"Cookie exists: {os.path.exists(COOKIES_PATH)}")
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
             file_path = ydl.prepare_filename(info)
-            if not file_path.endswith('.mp4'):
-                file_path = f"{os.path.splitext(file_path)[0]}.mp4"
 
-        title = info.get("title") or "Instagram Video"
+        logger.info(f"Downloaded file: {file_path}")
+
+        # Detect media type
+        mime_type = magic.from_file(file_path, mime=True)
+        logger.info(f"MIME type: {mime_type}")
+
+        is_video = mime_type.startswith("video")
+        media_type = "video" if is_video else "image"
+
+        title = info.get("title") or "Instagram Media"
         description = info.get("description") or ""
         uploader = info.get("uploader") or info.get("uploader_id") or "unknown"
 
         tags = []
         if description:
-            tags = [word.lstrip("#") for word in description.split() if word.startswith("#")]
+            tags = [
+                word.lstrip("#")
+                for word in description.split()
+                if word.startswith("#")
+            ]
 
         # Upload to Cloudinary
         upload_result = cloudinary.uploader.upload(
             file_path,
-            resource_type="video",
+            resource_type=media_type,
             folder="instagram_memes"
         )
 
-        thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("secure_url") or upload_result.get("url")
-        file_secure_url = upload_result.get("secure_url") or upload_result.get("url")
+        file_secure_url = (
+            upload_result.get("secure_url")
+            or upload_result.get("url")
+        )
 
-        # meme = Memes(
-        #     title=title,
-        #     file=file_secure_url,
-        #     thumbnail=thumbnail_url,
-        #     type="video",
-        #     tags=tags,
-        #     user_name=uploader,
-        #     language=language
-        # )
-        # meme.save()
+        thumbnail_url = None
+
+        if is_video:
+            public_id = upload_result["public_id"]
+
+            thumbnail_url = (
+                f"https://res.cloudinary.com/dvrmhmvkw/"
+                f"video/upload/"
+                f"c_fill,g_auto,h_720,w_720,q_auto:good/"
+                f"{public_id}.jpg"
+            )
+        else:
+            thumbnail_url = file_secure_url
+
         with transaction.atomic():
             with connection.cursor() as cursor:
                 cursor.execute(
@@ -460,7 +481,7 @@ def download_and_upload_instagram_video(url, language="english"):
                         title[:5000],
                         file_secure_url,
                         thumbnail_url,
-                        "video",
+                        media_type,
                         language
                     ]
                 )
@@ -469,15 +490,17 @@ def download_and_upload_instagram_video(url, language="english"):
 
         logger.info(f"Meme created successfully. ID={meme_id}")
 
-        # cleanup
-        try:
+        if os.path.exists(file_path):
             os.remove(file_path)
-        except Exception:
-            pass
 
-        return {"status": "success"}
-    except Exception as e:
-        logger.exception("Error in download_and_upload_instagram_video")
+        return {
+            "id": meme_id,
+            "type": media_type,
+            "url": file_secure_url
+        }
+
+    except Exception:
+        logger.exception("Error in download_and_upload_instagram_media")
         return None
 
 
