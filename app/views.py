@@ -423,16 +423,16 @@ def download_and_upload_instagram_video(url, language="english"):
         thumbnail_url = upload_result.get("thumbnail_url") or upload_result.get("secure_url") or upload_result.get("url")
         file_secure_url = upload_result.get("secure_url") or upload_result.get("url")
 
-        meme = Memes(
-            title=title,
-            file=file_secure_url,
-            thumbnail=thumbnail_url,
-            type="video",
-            tags=tags,
-            user_name=uploader,
-            language=language
-        )
-        meme.save()
+        # meme = Memes(
+        #     title=title,
+        #     file=file_secure_url,
+        #     thumbnail=thumbnail_url,
+        #     type="video",
+        #     tags=tags,
+        #     user_name=uploader,
+        #     language=language
+        # )
+        # meme.save()
         with transaction.atomic():
             with connection.cursor() as cursor:
                 cursor.execute(
