@@ -388,9 +388,12 @@ def download_and_upload_instagram_media(url, language="english"):
     try:
         temp_dir = TEMP_DIR
         os.makedirs(temp_dir, exist_ok=True)
+        import uuid
+
+        temp_filename = str(uuid.uuid4())
 
         ydl_opts = {
-            'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+            'outtmpl': os.path.join(temp_dir, f'{temp_filename}.%(ext)s'),
             'cookiefile': COOKIES_PATH,
             'format': 'best',
             'merge_output_format': 'mp4',
