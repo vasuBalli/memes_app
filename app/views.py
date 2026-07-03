@@ -475,7 +475,7 @@ def download_and_upload_instagram_video(url, language="english"):
         except Exception:
             pass
 
-        return meme
+        return {"status": "success", "meme_id": meme_id, "file_url": file_secure_url, "thumbnail_url": thumbnail_url}
     except Exception as e:
         logger.exception("Error in download_and_upload_instagram_video")
         return None
