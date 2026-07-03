@@ -478,6 +478,11 @@ def webhook(request):
             logger.info(f"Webhook payload: {data}")
 
             x = download_instagram_video(data, language="english")
+
+            if x:
+                logger.info("Uploaded successfully")
+            else:
+                logger.error("Upload failed")
             logger.info("uploaded successfully (if not None)")
             return JsonResponse({'status': 'received'}, status=200)
         except Exception as e:
@@ -500,123 +505,22 @@ def download_instagram_video(payload, language="english"):
             attachment.get("payload", {}).get("url") or ""
         )
 
-        title = attachment.get(
-            "payload", {}
-        ).get("title", "Instagram Media")
+        logger.info(f"Instagram URL: {media_url}")
 
-        tags_list = [
-            w.lstrip("#")
-            for w in title.split()
-            if w.startswith("#")
-        ]
-
-        reel_id = (
-            attachment.get("payload", {}).get("reel_video_id")
-            or attachment.get("payload", {}).get("id")
-            or "unknown_id"
+        meme = download_and_upload_instagram_video(
+            media_url,
+            language=language
         )
 
-        local_path = os.path.join(
-            TEMP_DIR,
-            f"{reel_id}"
-        )
+        if meme:
+            logger.info(f"Meme created successfully: {meme.id}")
+            return meme
 
-        os.makedirs(TEMP_DIR, exist_ok=True)
+        logger.error("Failed to create meme")
+        return None
 
-        # Download media
-        r = requests.get(media_url, timeout=30)
-
-        logger.info(f"Status code: {r.status_code}")
-        logger.info(f"Content-Type: {r.headers.get('Content-Type')}")
-        logger.info(f"Final URL: {r.url}")
-        logger.info(f"First 300 chars: {r.text[:300]}")
-        with open(local_path, "wb") as f:
-            f.write(r.content)
-
-        # Detect file type
-        mime = magic.from_file(
-            local_path,
-            mime=True
-        )
-
-        is_video = "video" in mime
-
-        # Upload to Cloudinary
-        upload = cloudinary.uploader.upload(
-            local_path,
-            resource_type="video" if is_video else "image",
-            folder="instagram_memes"
-        )
-
-        cloud_url = upload["secure_url"]
-
-        thumbnail_url = None
-
-        if is_video:
-            public_id = upload["public_id"]
-
-            thumbnail_url = (
-                f"https://res.cloudinary.com/"
-                f"dvrmhmvkw/video/upload/"
-                f"c_fill,g_auto:face,h_720,w_720,"
-                f"q_auto:good/{public_id}.jpg"
-            )
-
-        # RAW SQL INSERT
-        with connection.cursor() as cursor:
-
-            cursor.execute(
-                """
-                INSERT INTO memes (
-                    title,
-                    file_url,
-                    thumbnail_url,
-                    type,
-                    language,
-                    likes_count,
-                    views_count,
-                    bookmarks_count,
-                    shares_count,
-                    comments_count,
-                    created_at
-                )
-                VALUES (
-                    %s, %s, %s, %s, %s,
-                    0, 0, 0, 0, 0, NOW()
-                )
-                RETURNING id
-                """,
-                [
-                    title[:5000],
-                    cloud_url,
-                    thumbnail_url,
-                    "video" if is_video else "image",
-                    language
-                ]
-            )
-
-            meme_id = cursor.fetchone()[0]
-
-        logger.info(
-            f"Meme created successfully. ID={meme_id}"
-        )
-
-        if os.path.exists(local_path):
-            os.remove(local_path)
-
-        return {
-            "id": meme_id,
-            "title": title,
-            "file_url": cloud_url,
-            "thumbnail_url": thumbnail_url,
-            "type": "video" if is_video else "image"
-        }
-
-    except Exception as e:
-        logger.exception(
-            "Error in download_instagram_video"
-        )
-
+    except Exception:
+        logger.exception("Error in download_instagram_video")
         return None
 
 
