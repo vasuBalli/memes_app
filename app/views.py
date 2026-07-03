@@ -497,9 +497,8 @@ def download_and_upload_instagram_media(url, language="english"):
             os.remove(file_path)
 
         return {
-            "id": meme_id,
-            "type": media_type,
-            "url": file_secure_url
+            "status": "success",
+            
         }
 
     except Exception:
