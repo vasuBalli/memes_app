@@ -557,7 +557,7 @@ def download_instagram_video(payload, language="english"):
 
         logger.info(f"Instagram URL: {media_url}")
 
-        meme = download_and_upload_instagram_video(
+        meme = download_and_upload_instagram_media(
             media_url,
             language=language
         )
