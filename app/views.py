@@ -1,4 +1,3 @@
-# app/views.py
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
@@ -179,7 +178,7 @@ def reels_feed(request):
 def toggle_like(request):
     try:
           # ✅ SAFE JSON PARSE (NO CRASH)
-       
+
         logger.info(f"method: {request.method}")
         logger.info(f"body: {request.body}")
         if request.method != "POST":
@@ -290,7 +289,7 @@ def track_view(request):
 
     except Exception:
         return JsonResponse({"status": "error"}, status=500)
-    
+
 def post_details(request):
     """
     Get a single post/meme by ID
@@ -399,7 +398,7 @@ def download_and_upload_instagram_video(url, language="english"):
             'retries': 3,
             'http_headers': {
                 'User-Agent': (
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '    
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                     'AppleWebKit/537.36 (KHTML, like Gecko) '
                     'Chrome/125.0 Safari/537.36'
                 ),
@@ -527,6 +526,10 @@ def download_instagram_video(payload, language="english"):
         # Download media
         r = requests.get(media_url, timeout=30)
 
+        logger.info(f"Status code: {r.status_code}")
+        logger.info(f"Content-Type: {r.headers.get('Content-Type')}")
+        logger.info(f"Final URL: {r.url}")
+        logger.info(f"First 300 chars: {r.text[:300]}")
         with open(local_path, "wb") as f:
             f.write(r.content)
 
@@ -695,7 +698,7 @@ def privacy_policy(request):
     <body style="font-family: Arial; margin: 40px;">
         <h1>Privacy Policy</h1>
         <p>We respect your privacy and are committed to protecting your personal information.</p>
-        <p>This application uses the Instagram Graph API to access your public content only 
+        <p>This application uses the Instagram Graph API to access your public content only
         with your explicit permission.</p>
         <p>No personal or sensitive information is stored or shared with third parties.</p>
         <p>If you wish to revoke access, you can do so through your Instagram settings at any time.</p>
