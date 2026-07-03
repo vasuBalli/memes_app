@@ -388,25 +388,17 @@ def download_and_upload_instagram_video(url, language="english"):
         temp_dir = TEMP_DIR
         os.makedirs(temp_dir, exist_ok=True)
         ydl_opts = {
-            'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
-            'cookies': COOKIES_PATH,
-            'format': 'best',
-            'merge_output_format': 'mp4',
-            'quiet': True,
-            'noplaylist': True,
-            'no_cookies_update': True,
-            'retries': 3,
-            'http_headers': {
-                'User-Agent': (
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                    'AppleWebKit/537.36 (KHTML, like Gecko) '
-                    'Chrome/125.0 Safari/537.36'
-                ),
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            },
-        }
-
+    'outtmpl': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+    'cookiefile': COOKIES_PATH,
+    'format': 'best',
+    'merge_output_format': 'mp4',
+    'quiet': True,
+    'noplaylist': True,
+    'no_cookies_update': True,
+    'retries': 3,
+}
+        logger.info(f"Cookie file: {COOKIES_PATH}")
+        logger.info(f"Cookie exists: {os.path.exists(COOKIES_PATH)}")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
             file_path = ydl.prepare_filename(info)
