@@ -165,8 +165,8 @@ cloudinary.config(
 # DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost",  # React/Next.js frontend
-    "http://127.0.0.1",  # Sometimes frontend uses this instead
+    "http://localhost:3000",  # React/Next.js frontend
+    "http://127.0.0.1:3000",  # Sometimes frontend uses this instead
 ]
 CORS_ALLOW_CREDENTIALS = True
 

@@ -565,7 +565,7 @@ def download_instagram_video(payload, language="english"):
         )
 
         if meme:
-            logger.info(f"Meme created successfully: {meme.id}")
+            logger.info(f"Meme created successfully")
             return meme
 
         logger.error("Failed to create meme")
