@@ -623,3 +623,303 @@ AttributeError: 'NoneType' object has no attribute 'video'
 [2026-07-02 00:47:25,244] INFO django.utils.autoreload: Watching for file changes with StatReloader
 [2026-07-02 01:04:57,444] INFO django.utils.autoreload: Watching for file changes with StatReloader
 [2026-07-02 01:06:35,627] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-05 23:58:02,207] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-05 23:58:57,744] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-05 23:59:55,475] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-05 23:59:57,454] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:08:01,704] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:08:05,589] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:09:30,746] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:09:33,851] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:10:21,539] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:10:24,453] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:13:27,958] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 00:13:31,163] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:27:42,363] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 00:27:47,529] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:28:51,683] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 00:28:54,255] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:28:58,402] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 00:29:01,119] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:29:07,936] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 00:29:10,675] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:38:55,887] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:39:25,196] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 00:39:28,080] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:39:32,519] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 00:39:35,227] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:39:54,384] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 00:39:57,044] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:43:09,333] WARNING django.server: "GET /api/auth/signup HTTP/1.1" 404 4990
+[2026-07-06 00:43:18,137] INFO django.server: "GET /api/signup HTTP/1.1" 301 0
+[2026-07-06 00:43:18,147] WARNING django.server: "GET /api/signup/ HTTP/1.1" 405 0
+[2026-07-06 00:43:41,194] ERROR django.request: Internal Server Error: /api/signup
+Traceback (most recent call last):
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\utils\deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\middleware\common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\vasu balli\Desktop\meme_proj\env\Lib\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/signup/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2026-07-06 00:43:41,210] ERROR django.server: "POST /api/signup HTTP/1.1" 500 77578
+[2026-07-06 00:44:42,244] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 00:44:46,261] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:45:01,602] WARNING django.security.csrf: Forbidden (CSRF cookie not set.): /api/signup
+[2026-07-06 00:45:01,604] WARNING django.server: "POST /api/signup HTTP/1.1" 403 2855
+[2026-07-06 00:45:35,247] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 00:45:38,474] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:45:50,986] INFO django.server: "POST /api/signup HTTP/1.1" 200 57
+[2026-07-06 00:47:49,534] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:47:54,618] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:48:28,637] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:48:32,263] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:50:39,561] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:50:44,140] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:51:11,669] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:51:15,087] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:51:37,545] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 00:51:40,609] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:51:51,698] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 00:51:54,864] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:51:59,859] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 00:52:03,087] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:53:13,050] WARNING django.server: "GET /api/verify_signup HTTP/1.1" 405 0
+[2026-07-06 00:53:59,047] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 46
+[2026-07-06 00:55:15,812] ERROR django.request: Internal Server Error: /api/verify_signup
+[2026-07-06 00:55:15,813] ERROR django.server: "POST /api/verify_signup HTTP/1.1" 500 87
+[2026-07-06 00:57:32,687] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:57:38,492] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:58:12,983] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 00:58:16,458] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 00:58:29,118] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 50
+[2026-07-06 00:58:53,019] INFO django.server: "POST /api/signup HTTP/1.1" 200 57
+[2026-07-06 00:59:28,345] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 50
+[2026-07-06 01:00:12,728] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 46
+[2026-07-06 01:01:10,879] INFO django.server: "POST /api/signup HTTP/1.1" 200 57
+[2026-07-06 01:01:50,117] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 50
+[2026-07-06 01:03:31,606] INFO django.server: "POST /api/signup HTTP/1.1" 200 57
+[2026-07-06 01:06:38,821] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 01:06:43,415] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:06:50,999] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\meme\settings.py changed, reloading.
+[2026-07-06 01:06:53,914] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:06:59,297] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 46
+[2026-07-06 01:08:12,670] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:08:22,279] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:08:42,930] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:08:46,435] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:09:01,725] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 57
+[2026-07-06 01:09:18,568] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:09:22,086] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:09:39,855] INFO django.server: "POST /api/signup HTTP/1.1" 200 57
+[2026-07-06 01:10:12,037] WARNING django.server: "POST /api/verify_signup HTTP/1.1" 400 46
+[2026-07-06 01:10:45,950] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:10:49,626] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:10:55,284] ERROR django.request: Internal Server Error: /api/verify_signup
+[2026-07-06 01:10:55,285] ERROR django.server: "POST /api/verify_signup HTTP/1.1" 500 81
+[2026-07-06 01:13:01,224] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:13:05,911] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:13:09,891] ERROR django.request: Internal Server Error: /api/verify_signup
+[2026-07-06 01:13:09,892] ERROR django.server: "POST /api/verify_signup HTTP/1.1" 500 162
+[2026-07-06 01:15:07,137] INFO django.server: "POST /api/verify_signup HTTP/1.1" 200 208
+[2026-07-06 01:17:38,200] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:17:41,668] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:18:46,199] WARNING django.server: "GET //api/login HTTP/1.1" 404 5243
+[2026-07-06 01:18:52,962] WARNING django.server: "GET /api/login HTTP/1.1" 404 5243
+[2026-07-06 01:19:10,704] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 01:19:13,582] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:19:22,079] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 01:19:25,143] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:19:29,756] WARNING django.server: "GET /api/login HTTP/1.1" 405 0
+[2026-07-06 01:19:39,958] INFO django.server: "POST /api/login HTTP/1.1" 200 216
+[2026-07-06 01:25:18,464] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:25:22,976] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:25:28,924] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 01:25:31,627] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:25:40,069] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 01:25:42,869] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:27:23,177] WARNING django.server: "POST /api/logout HTTP/1.1" 401 63
+[2026-07-06 01:27:55,169] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:27:58,549] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:28:07,081] WARNING django.server: "POST /api/logout HTTP/1.1" 401 63
+[2026-07-06 01:28:36,563] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:28:39,309] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:28:51,122] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:28:53,812] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:29:15,168] INFO django.server: "POST /api/logout HTTP/1.1" 200 60
+[2026-07-06 01:31:55,769] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:31:59,422] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:32:40,108] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:32:42,899] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:33:05,764] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:33:08,331] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:33:20,399] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:33:23,265] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:34:55,190] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:35:04,043] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:37:00,870] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:37:04,017] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:37:29,390] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:37:31,970] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:37:38,581] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:37:41,542] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:38:02,387] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-06 01:38:05,456] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:38:31,477] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 01:38:34,044] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:38:53,344] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-06 01:38:56,128] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-06 01:39:34,331] INFO django.server: "POST /api/forgot_password HTTP/1.1" 200 58
+[2026-07-06 01:43:59,964] INFO django.server: "POST /api/reset_password HTTP/1.1" 200 66
+[2026-07-08 23:13:15,326] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:13:23,195] WARNING django.server: "POST /api/like_meme HTTP/1.1" 401 59
+[2026-07-08 23:15:13,725] WARNING django.server: "POST /api/like_meme HTTP/1.1" 401 63
+[2026-07-08 23:15:53,088] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\core\auth.py changed, reloading.
+[2026-07-08 23:15:56,876] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:16:04,510] WARNING django.server: "POST /api/like_meme HTTP/1.1" 401 59
+[2026-07-08 23:21:02,296] WARNING django.server: "POST /api/like_meme HTTP/1.1" 401 59
+[2026-07-08 23:22:01,002] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\core\auth.py changed, reloading.
+[2026-07-08 23:22:03,905] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:22:08,550] WARNING django.server: "POST /api/like_meme HTTP/1.1" 401 59
+[2026-07-08 23:22:27,729] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\core\auth.py changed, reloading.
+[2026-07-08 23:22:29,882] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:22:31,611] ERROR django.request: Internal Server Error: /api/like_meme
+[2026-07-08 23:22:31,611] ERROR django.server: "POST /api/like_meme HTTP/1.1" 500 199
+[2026-07-08 23:24:11,878] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:24:14,462] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:25:36,140] ERROR django.request: Internal Server Error: /api/like_meme
+[2026-07-08 23:25:36,141] ERROR django.server: "POST /api/like_meme HTTP/1.1" 500 197
+[2026-07-08 23:26:44,950] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:26:48,070] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:26:51,217] ERROR django.request: Internal Server Error: /api/like_meme
+[2026-07-08 23:26:51,218] ERROR django.server: "POST /api/like_meme HTTP/1.1" 500 197
+[2026-07-08 23:27:04,840] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:27:06,788] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:27:11,242] ERROR django.request: Internal Server Error: /api/like_meme
+[2026-07-08 23:27:11,242] ERROR django.server: "POST /api/like_meme HTTP/1.1" 500 196
+[2026-07-08 23:29:50,650] ERROR django.request: Internal Server Error: /api/like_meme
+[2026-07-08 23:29:50,658] ERROR django.server: "POST /api/like_meme HTTP/1.1" 500 197
+[2026-07-08 23:32:08,297] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:32:11,115] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:32:23,447] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:32:25,584] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:32:27,896] INFO django.server: "POST /api/like_meme HTTP/1.1" 200 54
+[2026-07-08 23:32:52,479] INFO django.server: "POST /api/like_meme HTTP/1.1" 200 55
+[2026-07-08 23:33:41,473] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:33:44,308] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:33:54,345] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:33:56,931] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:34:00,178] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:34:02,527] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:34:09,949] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:34:11,904] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:35:39,288] ERROR django.request: Internal Server Error: /api/view_meme
+[2026-07-08 23:35:39,291] ERROR django.server: "POST /api/view_meme HTTP/1.1" 500 199
+[2026-07-08 23:35:50,151] INFO django.server: "POST /api/view_meme HTTP/1.1" 200 39
+[2026-07-08 23:36:35,727] INFO django.server: "POST /api/view_meme HTTP/1.1" 200 39
+[2026-07-08 23:36:49,961] INFO django.server: "POST /api/view_meme HTTP/1.1" 200 39
+[2026-07-08 23:38:15,225] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:38:18,303] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:38:22,040] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:38:24,499] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:38:29,570] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:38:31,281] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:38:36,119] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:38:38,037] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:38:40,430] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:38:42,129] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:38:57,329] WARNING django.server: "POST /api/add_comment HTTP/1.1" 404 7124
+[2026-07-08 23:39:16,356] WARNING django.server: "POST /api/add_comment HTTP/1.1" 404 7124
+[2026-07-08 23:39:31,589] INFO django.server: "POST /api/comment_meme HTTP/1.1" 200 162
+[2026-07-08 23:41:18,190] INFO django.server: "POST /api/comment_meme HTTP/1.1" 200 146
+[2026-07-08 23:44:30,481] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:44:33,228] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:44:44,008] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:44:45,968] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:44:51,288] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:44:53,189] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:46:20,385] INFO django.server: "POST /api/bookmark_meme HTTP/1.1" 200 63
+[2026-07-08 23:46:36,426] INFO django.server: "POST /api/bookmark_meme HTTP/1.1" 200 64
+[2026-07-08 23:49:05,119] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:49:13,897] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:49:19,999] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:49:23,789] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:50:29,889] INFO django.server: "POST /api/share_meme HTTP/1.1" 200 40
+[2026-07-08 23:50:37,842] INFO django.server: "POST /api/share_meme HTTP/1.1" 200 40
+[2026-07-08 23:53:12,001] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:53:17,732] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:53:30,874] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:53:33,786] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:53:38,206] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:53:41,078] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:53:55,494] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:53:58,890] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:54:04,926] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-08 23:54:07,901] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:54:40,846] WARNING django.server: "POST /api/get_comments?meme_id=1&page=1&page_size=20 HTTP/1.1" 405 0
+[2026-07-08 23:54:48,733] INFO django.server: "GET /api/get_comments?meme_id=1&page=1&page_size=20 HTTP/1.1" 200 86
+[2026-07-08 23:55:05,860] INFO django.server: "GET /api/get_comments?meme_id=2&page=1&page_size=20 HTTP/1.1" 200 509
+[2026-07-08 23:57:46,000] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:57:50,161] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:57:57,236] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:57:59,933] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:58:14,004] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-08 23:58:16,463] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-08 23:58:22,225] INFO django.server: "GET /api/get_comments?meme_id=2&page=1&page_size=20 HTTP/1.1" 200 509
+[2026-07-08 23:58:26,458] INFO django.server: "GET /api/get_comments?meme_id=2&page=1&page_size=20 HTTP/1.1" 200 509
+[2026-07-09 00:00:04,123] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-09 00:00:10,286] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:01:03,357] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:01:07,512] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:01:12,345] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:01:15,299] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:01:39,253] INFO django.server: "POST /api/delete_comment HTTP/1.1" 200 86
+[2026-07-09 00:01:54,604] INFO django.server: "GET /api/get_comments?meme_id=2&page=1&page_size=20 HTTP/1.1" 200 322
+[2026-07-09 00:02:09,893] INFO django.server: "POST /api/delete_comment HTTP/1.1" 200 86
+[2026-07-09 00:02:14,103] WARNING django.server: "POST /api/delete_comment HTTP/1.1" 404 52
+[2026-07-09 00:02:23,324] INFO django.server: "GET /api/get_comments?meme_id=2&page=1&page_size=20 HTTP/1.1" 200 86
+[2026-07-09 00:04:05,806] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-09 00:04:09,723] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:04:15,004] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:04:17,834] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:05:27,359] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:05:30,360] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:05:38,927] INFO django.server: "GET /api/get_bookmarks?page=1&page_size=20 HTTP/1.1" 200 73
+[2026-07-09 00:05:49,042] INFO django.server: "POST /api/bookmark_meme HTTP/1.1" 200 63
+[2026-07-09 00:05:58,255] INFO django.server: "GET /api/get_bookmarks?page=1&page_size=20 HTTP/1.1" 200 466
+[2026-07-09 00:08:09,956] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-09 00:08:13,558] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:08:18,020] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:08:20,705] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:09:07,119] INFO django.server: "GET /api/get_likes?page=1&page_size=20 HTTP/1.1" 200 73
+[2026-07-09 00:09:16,542] INFO django.server: "POST /api/like_meme HTTP/1.1" 200 54
+[2026-07-09 00:09:23,012] INFO django.server: "GET /api/get_likes?page=1&page_size=20 HTTP/1.1" 200 465
+[2026-07-09 00:11:40,629] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-09 00:11:44,844] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:11:49,582] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:11:52,568] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:11:56,184] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:11:58,757] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:12:26,447] INFO django.server: "GET /api/get_watch_history?page=1&page_size=20 HTTP/1.1" 200 512
+[2026-07-09 00:14:53,368] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-09 00:14:56,994] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:15:06,640] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:15:09,889] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:16:06,547] WARNING django.server: "GET /api/profile HTTP/1.1" 404 9277
+[2026-07-09 00:16:20,800] INFO django.server: "GET /api/get_profile HTTP/1.1" 200 331
+[2026-07-09 00:19:28,702] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\views.py changed, reloading.
+[2026-07-09 00:19:33,450] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:19:46,514] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:19:49,272] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:19:52,176] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:19:54,801] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:20:07,972] INFO django.utils.autoreload: C:\Users\vasu balli\Desktop\meme_proj\meme\app\urls.py changed, reloading.
+[2026-07-09 00:20:10,548] INFO django.utils.autoreload: Watching for file changes with StatReloader
+[2026-07-09 00:22:01,154] INFO django.server: "GET /api/get_profile HTTP/1.1" 200 331
+[2026-07-09 00:22:09,790] INFO django.server: "POST /api/update_profile HTTP/1.1" 200 184
+[2026-07-09 00:22:21,700] INFO django.server: "GET /api/get_profile HTTP/1.1" 200 389
